@@ -4,7 +4,8 @@ WORKDIR /app
 
 # Copy pom.xml and download dependencies
 COPY pom.xml .
-RUN mvn dependency:go-offline
+# RUN mvn dependency:go-offline
+#RUN mvn dependency:resolve
 
 # Copy source code and build
 COPY src ./src
@@ -23,3 +24,5 @@ EXPOSE ${SERVER_PORT}
 
 # Run Spring Boot app
 ENTRYPOINT ["sh", "-c", "java -jar app.jar"]
+
+

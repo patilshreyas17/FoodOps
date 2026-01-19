@@ -31,6 +31,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
 
         return path.startsWith("/swagger-ui")
                 || path.startsWith("/v3/api-docs")
+                || path.startsWith("/actuator/")
                 || path.equals("/swagger-ui.html")
                 || path.equals("/error");
     }

@@ -1,4 +1,3 @@
-
 services:
   mysql:
     image: mysql:8.1
@@ -7,7 +6,7 @@ services:
     volumes:
       - ./mysql-data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "3307:3306"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
@@ -20,6 +19,11 @@ services:
     env_file: .env
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
+    environment:
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - APP_CORS_ORIGINS=${CORS_ORIGINS}
     depends_on:
       mysql:
         condition: service_healthy

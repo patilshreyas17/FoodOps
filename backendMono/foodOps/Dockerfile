@@ -2,10 +2,9 @@
 FROM maven:3.9.9-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Copy pom.xml and download dependencies
+# Copy pom.xml and download dependencies (cached layer)
 COPY pom.xml .
-# RUN mvn dependency:go-offline
-#RUN mvn dependency:resolve
+RUN mvn dependency:go-offline -B
 
 # Copy source code and build
 COPY src ./src
@@ -19,10 +18,7 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 # Expose the port
-ARG SERVER_PORT=5454
-EXPOSE ${SERVER_PORT}
+EXPOSE 5454
 
 # Run Spring Boot app
-ENTRYPOINT ["sh", "-c", "java -jar app.jar"]
-
-
+ENTRYPOINT ["java", "-jar", "app.jar"]

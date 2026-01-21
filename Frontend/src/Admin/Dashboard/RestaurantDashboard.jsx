@@ -23,7 +23,7 @@ const RestaurantDashboard = () => {
         jwt: localStorage.getItem("jwt"),
       })
     );
-  }, [id,dispatch]);
+  }, []);
 
   console.log("restaurant",restaurant)
   return (

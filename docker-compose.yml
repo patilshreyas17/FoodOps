@@ -1,0 +1,93 @@
+services:
+  mysql:
+    image: mysql:8.1
+    container_name: foodops-mysql
+    # Now points to root .env
+    env_file: .env
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+#
+##
+  discovery-service:
+    build: ./discovery-service
+    container_name: discovery-service
+    env_file: .env # Points to your root .env file
+    ports:
+      - "${DISCOVERY_SERVICE_PORT}:${DISCOVERY_SERVICE_PORT}"
+    environment:
+      - SERVER_PORT=${DISCOVERY_SERVICE_PORT}
+      - EUREKA_CLIENT_REGISTER_WITH_EUREKA=false
+      - EUREKA_CLIENT_FETCH_REGISTRY=false
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:${DISCOVERY_SERVICE_PORT}/" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+#
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    env_file: .env
+    ports:
+      - "${GATEWAY_SERVICE_PORT}:${GATEWAY_SERVICE_PORT}"
+    environment:
+      - SERVER_PORT=${GATEWAY_SERVICE_PORT}
+
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://discovery-service:${DISCOVERY_SERVICE_PORT}/eureka/
+
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+#
+#
+  payment-service:
+    build: ./payment-service
+    env_file: .env
+    # Map a range of host ports (8081-8085) to the internal container port
+    ports:
+      - "${PAYMENT_SERVICE_PORT}:${PAYMENT_SERVICE_PORT}"
+    environment:
+      - SERVER_PORT=${PAYMENT_SERVICE_PORT}
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://discovery-service:${DISCOVERY_SERVICE_PORT}/eureka/
+
+      #- EUREKA_INSTANCE_INSTANCE_ID=payment-service:$${random.value}
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+  app:
+    build: ./Backend
+    container_name: foodops-app
+    # Now points to root .env
+    env_file: .env
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    environment:
+      - SPRING_APPLICATION_NAME=foodops-backend
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://discovery-service:${DISCOVERY_SERVICE_PORT}/eureka/
+      - SERVER_PORT=${SERVER_PORT}
+
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - APP_CORS_ORIGINS=${CORS_ORIGINS}
+    depends_on:
+      mysql:
+        condition: service_healthy
+  frontend:
+    build:
+      context: ./Frontend  # Ensure this points to your React project folder
+      dockerfile: Dockerfile
+    container_name: foodops-frontend
+    ports:
+      - "3000:80"          # Map local port 3000 to Nginx port 80
+    depends_on:
+      api-gateway:
+        condition: service_started
+    restart: always

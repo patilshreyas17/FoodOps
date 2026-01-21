@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+#      routes:
+#        - id: foodops-backend
+#          uri: lb://FOODOPS-BACKEND
+#          predicates:
+#            - Path=/auth/**, /api/**, /actuator/**, /swagger-ui/**, /v3/api-docs/**
+#
+
+
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+server:
+  port: 9090
+
+
+info:
+  app:
+    name: "API Gateway"
+    description: "API Gateway Service"
+    version: "1.0.0"
+
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      discovery:
+        enabled: true
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      access: read-only
+    health:
+      show-details: always

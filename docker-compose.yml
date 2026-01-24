@@ -52,7 +52,8 @@ services:
     environment:
       - SERVER_PORT=${PAYMENT_SERVICE_PORT}
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://discovery-service:${DISCOVERY_SERVICE_PORT}/eureka/
-
+      - RAZORPAY_API_KEY=${RAZORPAY_API_KEY}
+      - RAZORPAY_API_SECRET=${RAZORPAY_API_SECRET}
       #- EUREKA_INSTANCE_INSTANCE_ID=payment-service:$${random.value}
     depends_on:
       discovery-service:

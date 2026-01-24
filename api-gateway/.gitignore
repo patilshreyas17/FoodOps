@@ -1,33 +1,53 @@
-HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# --- Secrets & Config ---
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-### STS ###
-.apt_generated
+# --- Database ---
+mysql-data/
+
+# --- Java / Maven (Spring Boot) ---
+target/
+!.mvn/wrapper/maven-wrapper.jar
+build/
+.mvn/
+*.jar
+*.war
+*.ear
+/logs/
+
+# --- Node / React (Frontend) ---
+node_modules/
+/dist/
+/build/
+.pnp
+.pnp.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+
+# --- IDEs & Editors ---
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
 .classpath
-.factorypath
 .project
-.settings
+.settings/
+.factorypath
 .springBeans
 .sts4-cache
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
+.apt_generated
+bin/
 /nbproject/private/
 /nbbuild/
-/dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
-.vscode/
+# --- System Files ---
+.DS_Store
+Thumbs.db

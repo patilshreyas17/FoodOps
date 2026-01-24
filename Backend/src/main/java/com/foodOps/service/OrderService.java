@@ -10,11 +10,12 @@ import com.foodOps.model.Order;
 import com.foodOps.model.PaymentResponse;
 import com.foodOps.model.User;
 import com.foodOps.request.CreateOrderRequest;
+import com.razorpay.RazorpayException;
 import com.stripe.exception.StripeException;
 
 public interface OrderService {
 	
-	 public PaymentResponse createOrder(CreateOrderRequest order, User user) throws UserException, RestaurantException, CartException, StripeException;
+	 public PaymentResponse createOrder(CreateOrderRequest order, User user) throws UserException, RestaurantException, CartException, RazorpayException;
 	 
 	 public Order updateOrder(Long orderId, String orderStatus) throws OrderException;
 	 

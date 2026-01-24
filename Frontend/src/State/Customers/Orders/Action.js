@@ -6,10 +6,12 @@ import { GET_USERS_NOTIFICATION_FAILURE, GET_USERS_NOTIFICATION_SUCCESS } from "
 export const createOrder = (reqData) => {
   return async (dispatch) => {
     dispatch(createOrderRequest());
+    const token = reqData.token || reqData.jwt;
     try {
       const {data} = await api.post('/api/order', reqData.order,{
         headers: {
-            Authorization: `Bearer ${reqData.jwt}`,
+            Authorization: `Bearer ${token}`,
+
           },
       });
       if(data.payment_url){

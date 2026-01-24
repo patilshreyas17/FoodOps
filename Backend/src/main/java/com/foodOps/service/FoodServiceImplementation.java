@@ -25,11 +25,6 @@ import com.foodOps.request.CreateFoodRequest;
 public class FoodServiceImplementation implements FoodService {
 	@Autowired
 	private foodRepository foodRepository;
-	
-
-	
-//	@Autowired
-//	private RestaurantRepository restaurantRepository;
 
 
 	
@@ -68,7 +63,7 @@ public class FoodServiceImplementation implements FoodService {
 	public void deleteFood(Long foodId) throws FoodException {
 		Food food=findFoodById(foodId);
 		food.setRestaurant(null);;
-//		foodRepository.save(food);
+
 		foodRepository.delete(food);
 
 	}
@@ -125,7 +120,7 @@ public class FoodServiceImplementation implements FoodService {
 			        if (food.getFoodCategory() != null) {
 			            return food.getFoodCategory().getName().equals(foodCategory);
 			        }
-			        return false; // Return true if food category is null
+			        return false;
 			    })
 			    .collect(Collectors.toList());
 	}

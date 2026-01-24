@@ -56,7 +56,7 @@ public class AdminOrderController {
     		List<Order> orders = orderService.
     				getOrdersOfRestaurant(restaurantId,order_status);
     		
-//    		System.out.println("ORDER STATUS----- "+orderStatus);
+
     		return ResponseEntity.ok(orders);
     		
     	

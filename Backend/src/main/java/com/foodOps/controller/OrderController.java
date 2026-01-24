@@ -2,6 +2,7 @@ package com.foodOps.controller;
 
 import java.util.List;
 
+import com.razorpay.RazorpayException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,8 +40,8 @@ public class OrderController {
 	public ResponseEntity<PaymentResponse>  createOrder(@RequestBody CreateOrderRequest order,
 			@RequestHeader("Authorization") String jwt) 
 					throws UserException, RestaurantException, 
-					CartException, 
-					StripeException,
+					CartException,
+                    RazorpayException,
 					OrderException{
 		User user=userService.findUserProfileByJwt(jwt);
 		System.out.println("req user "+user.getEmail());

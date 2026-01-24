@@ -1,7 +1,6 @@
 package com.foodOps.config;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +38,7 @@ public class AppConfig {
 
 
                 .authorizeHttpRequests(auth -> auth
-                        // Add the leading / here
+
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
 

@@ -183,11 +183,11 @@ const Cart = () => {
                   <div className="flex justify-between text-gray-400">
                 <p>Deliver Fee</p>
                 <p>₹21</p>
-              </div> 
+              </div>
                   <div className="flex justify-between text-gray-400">
                 <p>Plateform Fee</p>
                 <p>₹5</p>
-              </div> 
+              </div>
                   <div className="flex justify-between text-gray-400">
                 <p>GST and Restaurant Charges</p>
                 <p>₹33</p>

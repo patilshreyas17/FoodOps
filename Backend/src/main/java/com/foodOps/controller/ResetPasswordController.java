@@ -41,11 +41,11 @@ public class ResetPasswordController {
         
         }
 
-        // Update user's password
+
         User user = resetToken.getUser();
         userService.updatePassword(user, req.getPassword());
 
-        // Delete the token
+
         passwordResetTokenService.delete(resetToken);
         
         ApiResponse res=new ApiResponse();

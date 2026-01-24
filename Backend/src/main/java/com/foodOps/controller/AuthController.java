@@ -91,7 +91,7 @@ public class AuthController {
 			throw new UserException("Email Is Already Used With Another Account");
 		}
 
-		// Create new user
+
 		User createdUser = new User();
 		createdUser.setEmail(email);
 		createdUser.setFullName(fullName);
@@ -103,7 +103,7 @@ public class AuthController {
 		Cart cart = new Cart();
 		cart.setCustomer(savedUser);
 		Cart savedCart = cartRepository.save(cart);
-//		savedUser.setCart(savedCart);
+
 
 		List<GrantedAuthority> authorities=new ArrayList<>();
 
@@ -183,11 +183,11 @@ public class AuthController {
 	        
 	        }
 
-	        // Update user's password
+
 	        User user = resetToken.getUser();
 	        userService.updatePassword(user, req.getPassword());
 
-	        // Delete the token
+
 	        passwordResetTokenService.delete(resetToken);
 	        
 	        ApiResponse res=new ApiResponse();

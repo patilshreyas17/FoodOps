@@ -50,8 +50,6 @@ This project uses environment variables for configuration.
 ```bash
 cp env.sample .env
 Open `.env` and fill in the required values.
-
----
 ```
 ##  `env.sample`
 
@@ -90,6 +88,11 @@ CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
 DISCOVERY_SERVICE_PORT=8761
 GATEWAY_SERVICE_PORT=9090
 PAYMENT_SERVICE_PORT=9091
+
+
+#---------- Razor Api Config ----------
+RAZORPAY_API_KEY= razor api key here
+RAZORPAY_API_SECRET= razor api secret here
 ```
 ##  Important Security Notes
 

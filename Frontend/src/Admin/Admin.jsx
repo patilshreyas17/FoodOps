@@ -28,6 +28,7 @@ const Admin = () => {
   const handleCloseSideBar = () => setOpenSideBar(false);
   const { auth, restaurant, ingredients } = useSelector((store) => store);
   const jwt = localStorage.getItem("jwt");
+
   useEffect(() => {
     if (restaurant.usersRestaurant) {
       dispatch(
@@ -51,29 +52,44 @@ const Admin = () => {
       );
     }
   }, [restaurant.usersRestaurant]);
-  return (
-    <div>
-      <AdminNavbar handleOpenSideBar={handleOpenSideBar} />
-      <div className="lg:flex justify-between">
-        <div className="">
-          <AdminSidebar handleClose={handleCloseSideBar} open={openSideBar} />
-        </div>
 
-        <div className="lg:w-[80vw]">
-          <Routes>
-            <Route path="/" element={<RestaurantDashboard />} />
-            <Route path="/orders" element={<RestaurantsOrder />} />
-            <Route path="/menu" element={<RestaurantsMenu />} />
-            <Route path="/add-menu" element={<AddMenuForm />} />
-            <Route path="/add-restaurant" element={<CreateRestaurantForm />} />
-            <Route path="/event" element={<IngredientTable />} />
-            <Route path="/ingredients" element={<Ingredients />} />
-            <Route path="/category" element={<Category />} />
-            <Route path="/details" element={<Details />} />
-          </Routes>
-        </div>
+  return (
+    <section className="min-h-screen bg-gradient-midnight relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-ocean-500/10 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute top-1/2 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-aurora-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }}></div>
       </div>
-    </div>
+
+      <AdminNavbar handleOpenSideBar={handleOpenSideBar} />
+      <div className="lg:flex justify-between relative">
+        <aside className="">
+          <AdminSidebar handleClose={handleCloseSideBar} open={openSideBar} />
+        </aside>
+
+        <main className="lg:w-[80vw] min-h-screen p-6 lg:p-8 relative">
+          <div className="max-w-7xl mx-auto">
+            {/* Glass overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-midnight-900/50 to-midnight-950/50 backdrop-blur-3xl rounded-3xl"></div>
+
+            <div className="relative z-10">
+              <Routes>
+                <Route path="/" element={<RestaurantDashboard />} />
+                <Route path="/orders" element={<RestaurantsOrder />} />
+                <Route path="/menu" element={<RestaurantsMenu />} />
+                <Route path="/add-menu" element={<AddMenuForm />} />
+                <Route path="/add-restaurant" element={<CreateRestaurantForm />} />
+                <Route path="/event" element={<IngredientTable />} />
+                <Route path="/ingredients" element={<Ingredients />} />
+                <Route path="/category" element={<Category />} />
+                <Route path="/details" element={<Details />} />
+              </Routes>
+            </div>
+          </div>
+        </main>
+      </div>
+    </section>
   );
 };
 

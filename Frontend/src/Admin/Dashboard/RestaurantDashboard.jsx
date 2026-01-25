@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getMenuItemsByRestaurantId } from "../../State/Customers/Menu/menu.action";
-import { Grid } from "@mui/material";
 import OrdersTable from "../Orders/OrderTable";
 import MenuItemTable from "../Food/MenuItemTable";
 import AvgCard from "../ReportCard/ReportCard";
@@ -12,7 +11,7 @@ import FastfoodIcon from "@mui/icons-material/Fastfood";
 
 const RestaurantDashboard = () => {
   const { id } = useParams();
-  const {restaurant}=useSelector(store=>store);
+  const { restaurant } = useSelector(store => store);
   console.log("restaurants id ", id);
   const dispatch = useDispatch();
 
@@ -25,55 +24,29 @@ const RestaurantDashboard = () => {
     );
   }, []);
 
-  console.log("restaurant",restaurant)
+  console.log("restaurant", restaurant)
   return (
-    <div className="px-2">
-      
-      <Grid container spacing={1}>
-        {/* <Grid item lg={3} xs={12}>
-          <AvgCard
-            title={"Total Earnings"}
-            value={`Rs. ${450}`}
-            growValue={70}
-            icon={
-              <CurrencyRupeeIcon sx={{ fontSize: "3rem", color: "gold" }} />
-            }
-          />
-        </Grid>
-        <Grid item lg={3} xs={12}>
-          <AvgCard
-            title={"Total Selles"}
-            value={`${390}`}
-            growValue={35}
-            icon={<SellIcon sx={{ fontSize: "3rem", color: "green" }} />}
-          />
-        </Grid>
-        <Grid item lg={3} xs={12}>
-          <AvgCard
-            title={"Sold Items"}
-            value={`${299}`}
-            growValue={30}
-            icon={<FastfoodIcon sx={{ fontSize: "3rem", color: "blue" }} />}
-          />
-        </Grid>
-        <Grid item lg={3} xs={12}>
-          <AvgCard
-            title={"Left Items"}
-            value={`${1}`}
-            growValue={10}
-            icon={<FastfoodIcon sx={{ fontSize: "3rem", color: "red" }} />
-            
-          }
-          />
-        </Grid> */}
-        <Grid lg={6} xs={12} item>
-          <OrdersTable name={"Recent Order"} isDashboard={true} />
-        </Grid>
-        <Grid lg={6} xs={12} item>
-          <MenuItemTable isDashboard={true} name={"Recently Added Menu"} />
-        </Grid>
-      </Grid>
-    </div>
+    <section className="px-4 lg:px-8 py-8">
+      <header className="mb-8">
+        <h1 className="font-plus-jakarta font-extrabold tracking-tighter text-4xl text-white mb-2">
+          Restaurant Dashboard
+        </h1>
+        <p className="text-gray-400 text-lg">Monitor your restaurant performance and operations</p>
+      </header>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <article className="transform transition-all duration-300 ease-in-out hover:scale-[1.02] hover:-translate-y-1">
+          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-2xl border border-white/10 shadow-glass p-6">
+            <OrdersTable name={"Recent Order"} isDashboard={true} />
+          </div>
+        </article>
+        <article className="transform transition-all duration-300 ease-in-out hover:scale-[1.02] hover:-translate-y-1">
+          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-2xl border border-white/10 shadow-glass p-6">
+            <MenuItemTable isDashboard={true} name={"Recently Added Menu"} />
+          </div>
+        </article>
+      </div>
+    </section>
   );
 };
 

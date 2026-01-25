@@ -1,6 +1,6 @@
 package com.foodOps.Exception;
 
-public class ReviewException extends Exception {
+public class ReviewException extends RuntimeException {
 
 	public ReviewException(String message) {
 		super(message);

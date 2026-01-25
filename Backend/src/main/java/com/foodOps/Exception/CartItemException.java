@@ -1,6 +1,6 @@
 package com.foodOps.Exception;
 
-public class CartItemException extends Exception {
+public class CartItemException extends RuntimeException {
 	
 	public CartItemException(String message) {
 		super(message);

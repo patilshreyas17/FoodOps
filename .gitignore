@@ -17,7 +17,7 @@ build/
 *.war
 *.ear
 /logs/
-
+keys.json
 # --- Node / React (Frontend) ---
 node_modules/
 /dist/

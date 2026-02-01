@@ -1,7 +1,7 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import "./App.css";
 
-import darkTheme from "./theme/DarkTheme";
+import darkTheme from "./theme/DarkTheme.js";
 import Routers from "./Routers/Routers";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";

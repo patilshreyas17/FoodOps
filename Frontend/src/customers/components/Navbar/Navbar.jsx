@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SearchIcon from "@mui/icons-material/Search";
+import MapIcon from "@mui/icons-material/Map";
 import { useLocation, useNavigate } from "react-router-dom";
 import Auth from "../../pages/Auth/Auth";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,8 +38,8 @@ const Navbar = () => {
   };
 
   const navigateToProfile = (e) => {
-    auth.user?.role === "ROLE_ADMIN" 
-    || auth.user?.role === "ROLE_RESTAURANT_OWNER"
+    auth.user?.role === "ROLE_ADMIN"
+      || auth.user?.role === "ROLE_RESTAURANT_OWNER"
       ? navigate("/admin/restaurant")
       : navigate("/my-profile");
   };
@@ -63,7 +64,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="px-5 z-50 py-[.8rem] bg-[#e91e63]  lg:px-20 flex justify-between">
+    <div className="px-5 z-50 py-[.8rem] bg-[#e91e63] lg:px-20 flex justify-between fixed top-0 left-0 right-0">
       <div className="flex items-center space-x-4">
         <div
           onClick={navigateToHome}
@@ -81,6 +82,11 @@ const Navbar = () => {
             <SearchIcon sx={{ fontSize: "1.5rem" }} />
           </IconButton>
         </div>
+        <div className="">
+          <IconButton onClick={() => navigate("/map-travel")}>
+            <MapIcon sx={{ fontSize: "1.5rem" }} />
+          </IconButton>
+        </div>
         <div className="flex items-center space-x-2">
           {auth.user?.fullName ? (
             <span
@@ -95,7 +101,7 @@ const Navbar = () => {
               }
               className=" font-semibold cursor-pointer"
             >
-              <Avatar sx={{ bgcolor: "white",color:pink.A400}} className="bg-white">
+              <Avatar sx={{ bgcolor: "white", color: pink.A400 }} className="bg-white">
                 {auth.user.fullName[0].toUpperCase()}
               </Avatar>
             </span>

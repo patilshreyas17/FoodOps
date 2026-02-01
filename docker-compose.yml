@@ -8,7 +8,7 @@ services:
     ports:
       - "3307:3306"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -82,9 +82,17 @@ services:
     build:
       context: ./Frontend
       dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL}
+        - VITE_GOOGLE_MAPS_API_KEY=${VITE_GOOGLE_MAPS_API_KEY}
+        - VITE_RAPID_API_KEY=${VITE_RAPID_API_KEY}
     container_name: foodops-frontend
     ports:
       - "3000:80"
+    environment:
+      - VITE_API_URL=${VITE_API_URL}
+      - VITE_GOOGLE_MAPS_API_KEY=${VITE_GOOGLE_MAPS_API_KEY}
+      - VITE_RAPID_API_KEY=${VITE_RAPID_API_KEY}
     depends_on:
       api-gateway:
         condition: service_started

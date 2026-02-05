@@ -29,11 +29,11 @@ const categories = [
 ];
 
 const foodTypes = [
-  {label:"All",value:"all"},
+  { label: "All", value: "all" },
   { label: "Vegetarian Only", value: "vegetarian" },
   { label: "Non-Vegetarian Only", value: "non_vegetarian" },
-  {label:"Seasonal",value:"seasonal"},
-  
+  { label: "Seasonal", value: "seasonal" },
+
 ];
 const Restaurant = () => {
   const dispatch = useDispatch();
@@ -46,7 +46,7 @@ const Restaurant = () => {
   const searchParams = new URLSearchParams(decodedQueryString);
   const foodType = searchParams.get("food_type");
   const foodCategory = searchParams.get("food_category");
-  const jwt=localStorage.getItem("jwt")
+  const jwt = localStorage.getItem("jwt")
 
   useEffect(() => {
     dispatch(
@@ -59,23 +59,23 @@ const Restaurant = () => {
       getMenuItemsByRestaurantId({
         jwt: localStorage.getItem("jwt"),
         restaurantId: id,
-        seasonal: foodType==="seasonal",
-        vegetarian: foodType==="vegetarian",
-        nonveg: foodType==="non_vegetarian",
+        seasonal: foodType === "seasonal",
+        vegetarian: foodType === "vegetarian",
+        nonveg: foodType === "non_vegetarian",
         foodCategory: foodCategory || ""
       })
     );
-    dispatch(getRestaurantsCategory({restaurantId:id,jwt}))
-  }, [id,foodType,foodCategory]);
+    dispatch(getRestaurantsCategory({ restaurantId: id, jwt }))
+  }, [id, foodType, foodCategory]);
 
   const handleFilter = (e, value) => {
     const searchParams = new URLSearchParams(location.search);
-  
-    if(value==="all"){
+
+    if (value === "all") {
       searchParams.delete(e.target.name);
       searchParams.delete("food_category");
     }
-    else searchParams.set(e.target.name, e.target.value); 
+    else searchParams.set(e.target.name, e.target.value);
 
     const query = searchParams.toString();
     navigate({ search: `?${query}` });
@@ -89,28 +89,28 @@ const Restaurant = () => {
           {restaurant.restaurant?.name}/{restaurant.restaurant?.id}/Order Online
         </h3>
         <div>
-         
+
           <Grid container spacing={2}>
             <Grid item xs={12}>
-            <img
-            className="w-full h-[40vh] object-cover"
-            src={restaurant.restaurant?.images[0]}
-            alt=""
-          />
+              <img
+                className="w-full h-[40vh] object-cover"
+                src={restaurant.restaurant?.images[0]}
+                alt=""
+              />
             </Grid>
             <Grid item xs={12} lg={6}>
-            <img
-            className="w-full h-[40vh] object-cover"
-            src={restaurant.restaurant?.images[1]}
-            alt=""
-          />
+              <img
+                className="w-full h-[40vh] object-cover"
+                src={restaurant.restaurant?.images[1]}
+                alt=""
+              />
             </Grid>
             <Grid item xs={12} lg={6}>
-            <img
-            className="w-full h-[40vh] object-cover"
-            src={restaurant.restaurant?.images[2]}
-            alt=""
-          />
+              <img
+                className="w-full h-[40vh] object-cover"
+                src={restaurant.restaurant?.images[2]}
+                alt=""
+              />
             </Grid>
           </Grid>
         </div>
@@ -120,15 +120,15 @@ const Restaurant = () => {
           </h1>
           <p className="text-gray-500 mt-1">{restaurant.restaurant?.description}</p>
           <div className="space-y-3 mt-3">
-              <p className="text-gray-500 flex items-center gap-3">
-            <LocationOnIcon/> <span>{restaurant.restaurant?.address.streetAddress}
-              </span> 
-          </p>
-          <p className="flex items-center gap-3 text-gray-500">
-           <TodayIcon/> <span className=" text-orange-300"> {restaurant.restaurant?.openingHours} (Today)</span>  
-          </p>
+            <p className="text-gray-500 flex items-center gap-3">
+              <LocationOnIcon /> <span>{restaurant.restaurant?.address.streetAddress}
+              </span>
+            </p>
+            <p className="flex items-center gap-3 text-gray-500">
+              <TodayIcon /> <span className=" text-orange-300"> {restaurant.restaurant?.openingHours} (Today)</span>
+            </p>
           </div>
-        
+
         </div>
       </section>
       <Divider />
@@ -136,7 +136,7 @@ const Restaurant = () => {
       <section className="pt-[2rem] lg:flex relative ">
         <div className="space-y-10 lg:w-[20%] filter">
           <div className="box space-y-5 lg:sticky top-28">
-            
+
             <div className="">
               <Typography sx={{ paddingBottom: "1rem" }} variant="h5">
                 Food Type
@@ -157,22 +157,22 @@ const Restaurant = () => {
                     />
                   ))}
                 </RadioGroup>
-                <Divider/>
+                <Divider />
                 <Typography sx={{ paddingBottom: "1rem" }} variant="h5">
-                Food Category
-              </Typography>
+                  Food Category
+                </Typography>
                 <RadioGroup
                   name="food_category"
                   value={foodCategory || "all"}
                   onChange={handleFilter}
                 >
-                   <FormControlLabel
-                      
-                      value={"all"}
-                      control={<Radio />}
-                      label={"All"}
-                      sx={{ color: "gray" }}
-                    />
+                  <FormControlLabel
+
+                    value={"all"}
+                    control={<Radio />}
+                    label={"All"}
+                    sx={{ color: "gray" }}
+                  />
                   {restaurant?.categories.map((item, index) => (
                     <FormControlLabel
                       key={index}
@@ -190,20 +190,19 @@ const Restaurant = () => {
         <div className="lg:w-[80%] space-y-5 lg:pl-10">
           {menu?.menuItems.map((item) => (
             <MenuItemCard item={item} />
-            // <p>ashok</p>
           ))}
         </div>
       </section>
     </div>
-    <Backdrop
-  sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-  open={menu.loading || restaurant.loading}
-  
->
-  <CircularProgress color="inherit" />
-</Backdrop>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={menu.loading || restaurant.loading}
+
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
-    
+
   );
 };
 

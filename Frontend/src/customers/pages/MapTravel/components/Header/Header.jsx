@@ -39,7 +39,6 @@ const Header = ({ setCoords, onLoad, onPlaceChanged }) => {
   const [searchValue, setSearchValue] = useState('');
 
   const handleSearch = () => {
-    // Simple search functionality - you can enhance this
     console.log('Searching for:', searchValue);
   };
 

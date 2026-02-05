@@ -1,5 +1,3 @@
-// Actions.js
-
 import { api } from "../../../config/api";
 import {
   createRestaurantFailure,
@@ -74,7 +72,7 @@ export const getRestaurantById = (reqData) => {
       });
       dispatch(getRestaurantByIdSuccess(response.data));
     } catch (error) {
-      console.log("error",error)
+      console.log("error", error)
       dispatch(getRestaurantByIdFailure(error));
     }
   };
@@ -126,7 +124,7 @@ export const updateRestaurant = ({ restaurantId, restaurantData, jwt }) => {
 
     try {
       const res = await api.put(
-        `api/admin/restaurant/${restaurantId}`,
+        `api/admin/restaurants/${restaurantId}`,
         restaurantData,
         {
           headers: {
@@ -145,7 +143,7 @@ export const deleteRestaurant = ({ restaurantId, jwt }) => {
     dispatch(deleteRestaurantRequest());
 
     try {
-      const res = await api.delete(`/api/admin/restaurant/${restaurantId}`, {
+      const res = await api.delete(`/api/admin/restaurants/${restaurantId}`, {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
@@ -176,13 +174,13 @@ export const updateRestaurantStatus = ({ restaurantId, jwt }) => {
       console.log("ressssss ", res.data);
       dispatch({ type: UPDATE_RESTAURANT_STATUS_SUCCESS, payload: res.data });
     } catch (error) {
-      console.log("error ",error)
+      console.log("error ", error)
       dispatch({ type: UPDATE_RESTAURANT_STATUS_FAILURE, payload: error });
     }
   };
 };
 
-export const createEventAction = ({ data, jwt,restaurantId }) => {
+export const createEventAction = ({ data, jwt, restaurantId }) => {
   return async (dispatch) => {
     dispatch({ type: CREATE_EVENTS_REQUEST });
 
@@ -282,7 +280,7 @@ export const createCategoryAction = ({ reqData, jwt }) => {
   };
 };
 
-export const getRestaurantsCategory = ({ jwt,restaurantId }) => {
+export const getRestaurantsCategory = ({ jwt, restaurantId }) => {
   return async (dispatch) => {
     dispatch({ type: GET_RESTAURANTS_CATEGORY_REQUEST });
     try {

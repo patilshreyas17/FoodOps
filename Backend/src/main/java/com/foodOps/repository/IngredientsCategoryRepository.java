@@ -8,11 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 import com.foodOps.model.IngredientCategory;
 
-public interface IngredientsCategoryRepository 
-extends JpaRepository<IngredientCategory, Long>{
-	
-	
-//	List<IngredientCategory> findByFoodId(Long menuItemId);
+public interface IngredientsCategoryRepository
+		extends JpaRepository<IngredientCategory, Long> {
+
 	List<IngredientCategory> findByRestaurantId(Long id);
 
 	@Query("SELECT e FROM IngredientCategory e "

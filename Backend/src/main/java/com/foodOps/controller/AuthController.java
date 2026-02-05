@@ -1,6 +1,5 @@
 package com.foodOps.controller;
 
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
+import com.foodOps.Exception.ResourceNotFoundException;
 import com.foodOps.Exception.UserException;
 import com.foodOps.config.JwtProvider;
 import com.foodOps.domain.USER_ROLE;
@@ -49,32 +49,31 @@ public class AuthController {
 	private CustomeUserServiceImplementation customUserDetails;
 	private CartRepository cartRepository;
 
-    private PasswordResetTokenService passwordResetTokenService;
+	private PasswordResetTokenService passwordResetTokenService;
 
-    private UserService userService;
+	private UserService userService;
 
-	public AuthController(UserRepository userRepository, 
-			PasswordEncoder passwordEncoder, 
+	public AuthController(UserRepository userRepository,
+			PasswordEncoder passwordEncoder,
 			JwtProvider jwtProvider,
 			CustomeUserServiceImplementation customUserDetails,
 			CartRepository cartRepository,
 			PasswordResetTokenService passwordResetTokenService,
-			UserService userService
-			) {
+			UserService userService) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.jwtProvider = jwtProvider;
 		this.customUserDetails = customUserDetails;
-		this.cartRepository=cartRepository;
-		this.passwordResetTokenService=passwordResetTokenService;
-		this.userService=userService;
+		this.cartRepository = cartRepository;
+		this.passwordResetTokenService = passwordResetTokenService;
+		this.userService = userService;
 
 	}
 
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hello, World!";
-    }
+	@GetMapping("/hello")
+	public String hello() {
+		return "Hello, World!";
+	}
 
 	@PostMapping("/signup")
 	public ResponseEntity<AuthResponse> createUserHandler(@Valid @RequestBody User user) throws UserException {
@@ -82,15 +81,13 @@ public class AuthController {
 		String email = user.getEmail();
 		String password = user.getPassword();
 		String fullName = user.getFullName();
-		USER_ROLE role=user.getRole();
+		USER_ROLE role = user.getRole();
 
 		User isEmailExist = userRepository.findByEmail(email);
 
-		if (isEmailExist!=null) {
-
-			throw new UserException("Email Is Already Used With Another Account");
+		if (isEmailExist != null) {
+			throw new UserException("Email Is Already Used With Another Account", "EMAIL_ALREADY_EXISTS");
 		}
-
 
 		User createdUser = new User();
 		createdUser.setEmail(email);
@@ -99,18 +96,16 @@ public class AuthController {
 		createdUser.setRole(role);
 
 		User savedUser = userRepository.save(createdUser);
-		
+
 		Cart cart = new Cart();
 		cart.setCustomer(savedUser);
 		Cart savedCart = cartRepository.save(cart);
 
-
-		List<GrantedAuthority> authorities=new ArrayList<>();
+		List<GrantedAuthority> authorities = new ArrayList<>();
 
 		authorities.add(new SimpleGrantedAuthority(role.toString()));
 
-
-		Authentication authentication = new UsernamePasswordAuthenticationToken(email, password,authorities);
+		Authentication authentication = new UsernamePasswordAuthenticationToken(email, password, authorities);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		String token = jwtProvider.generateToken(authentication);
@@ -142,9 +137,7 @@ public class AuthController {
 		authResponse.setJwt(token);
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-
 		String roleName = authorities.isEmpty() ? null : authorities.iterator().next().getAuthority();
-
 
 		authResponse.setRole(USER_ROLE.valueOf(roleName));
 
@@ -158,7 +151,7 @@ public class AuthController {
 
 		if (userDetails == null) {
 			System.out.println("sign in userDetails - null " + userDetails);
-			throw new BadCredentialsException("Invalid username or password");
+			throw new ResourceNotFoundException("User", username);
 		}
 		if (!passwordEncoder.matches(password, userDetails.getPassword())) {
 			System.out.println("sign in userDetails - password not match " + userDetails);
@@ -168,51 +161,49 @@ public class AuthController {
 	}
 
 	@PostMapping("/reset-password")
-	 public ResponseEntity<ApiResponse> resetPassword(
-	    		
-	    		@RequestBody ResetPasswordRequest req) throws UserException {
-	        
-	        PasswordResetToken resetToken = passwordResetTokenService.findByToken(req.getToken());
+	public ResponseEntity<ApiResponse> resetPassword(
 
-	        if (resetToken == null ) {
-	        	throw new UserException("token is required...");
-	        }
-	        if(resetToken.isExpired()) {
-	        	passwordResetTokenService.delete(resetToken);
-	        	throw new UserException("token get expired...");
-	        
-	        }
+			@RequestBody ResetPasswordRequest req) throws UserException {
 
+		PasswordResetToken resetToken = passwordResetTokenService.findByToken(req.getToken());
 
-	        User user = resetToken.getUser();
-	        userService.updatePassword(user, req.getPassword());
+		if (resetToken == null) {
+			throw new UserException("token is required...");
+		}
+		if (resetToken.isExpired()) {
+			passwordResetTokenService.delete(resetToken);
+			throw new UserException("token get expired...");
 
+		}
 
-	        passwordResetTokenService.delete(resetToken);
-	        
-	        ApiResponse res=new ApiResponse();
-	        res.setMessage("Password updated successfully.");
-	        res.setStatus(true);
+		User user = resetToken.getUser();
+		userService.updatePassword(user, req.getPassword());
 
-	        return ResponseEntity.ok(res);
-	    }
-	 
-	 @PostMapping("/reset-password-request")
-	    public ResponseEntity<ApiResponse> resetPassword(@RequestParam("email") String email) throws UserException {
-	        User user = userService.findUserByEmail(email);
-	        System.out.println("ResetPasswordController.resetPassword()");
+		passwordResetTokenService.delete(resetToken);
 
-	        if (user == null) {
-	        	throw new UserException("user not found");
-	        }
+		ApiResponse res = new ApiResponse();
+		res.setMessage("Password updated successfully.");
+		res.setStatus(true);
 
-	        userService.sendPasswordResetEmail(user);
+		return ResponseEntity.ok(res);
+	}
 
-	        ApiResponse res=new ApiResponse();
-	        res.setMessage("Password reset email sent successfully.");
-	        res.setStatus(true);
+	@PostMapping("/reset-password-request")
+	public ResponseEntity<ApiResponse> resetPassword(@RequestParam("email") String email) throws UserException {
+		User user = userService.findUserByEmail(email);
+		System.out.println("ResetPasswordController.resetPassword()");
 
-	        return ResponseEntity.ok(res);
-	    }
-	    
+		if (user == null) {
+			throw new UserException("user not found");
+		}
+
+		userService.sendPasswordResetEmail(user);
+
+		ApiResponse res = new ApiResponse();
+		res.setMessage("Password reset email sent successfully.");
+		res.setStatus(true);
+
+		return ResponseEntity.ok(res);
+	}
+
 }

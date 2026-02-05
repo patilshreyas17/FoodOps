@@ -20,7 +20,6 @@ const ingredients = [
 ];
 
 const IngredientsList = () => {
-  // Grouping ingredients by category
   const categorizedIngredients = ingredients.reduce((acc, ingredient) => {
     const { ingredientCategory, ingredientName } = ingredient;
     if (!acc[ingredientCategory]) {

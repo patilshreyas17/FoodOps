@@ -35,14 +35,14 @@ const MenuItemTable = ({ isDashboard, name }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { menu, ingredients, restaurant,auth } = useSelector((store) => store);
+  const { menu, ingredients, restaurant, auth } = useSelector((store) => store);
   const { id } = useParams();
-  const jwt=localStorage.getItem("jwt");
+  const jwt = localStorage.getItem("jwt");
 
   useEffect(() => {
-    
-      if(restaurant.usersRestaurant){
-       dispatch( getMenuItemsByRestaurantId({
+
+    if (restaurant.usersRestaurant) {
+      dispatch(getMenuItemsByRestaurantId({
         restaurantId: restaurant.usersRestaurant?.id,
         jwt: localStorage.getItem("jwt"),
         seasonal: false,
@@ -50,25 +50,19 @@ const MenuItemTable = ({ isDashboard, name }) => {
         nonveg: false,
         foodCategory: "",
       }));
-      }
-      
-    
-  }, [ingredients.update,restaurant.usersRestaurant]);
+    }
 
-  // console.log(
-  //   "-------- ",
-  //   menu.menuItems[1].ingredients,
-  //   categorizedIngredients(menu.menuItems[1].ingredients)
-  // );
 
-  
+  }, [ingredients.update, restaurant.usersRestaurant]);
+
+
 
   const handleFoodAvialability = (foodId) => {
-    dispatch(updateMenuItemsAvailability({foodId,jwt:auth.jwt || jwt}));
+    dispatch(updateMenuItemsAvailability({ foodId, jwt: auth.jwt || jwt }));
   };
 
   const handleDeleteFood = (foodId) => {
-    dispatch(deleteFoodAction({foodId,jwt:auth.jwt || jwt}));
+    dispatch(deleteFoodAction({ foodId, jwt: auth.jwt || jwt }));
   };
 
   return (

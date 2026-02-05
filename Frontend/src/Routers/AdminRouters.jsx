@@ -1,31 +1,15 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getRestaurantByUserId } from "../State/Customers/Restaurant/restaurant.action";
 import Admin from "../Admin/Admin";
-import AdminDashboard from "../Admin/Dashboard/AdminDashboard";
-import SuperAdmin from "../SuperAdmin/SuperAdmin";
-import NotFound from "../customers/pages/NotFound/NotFound";
-import { useSelector } from "react-redux";
-import CreateRestaurantForm from "../Admin/AddRestaurants/CreateRestaurantForm";
+import { Box, CircularProgress, Typography } from "@mui/material";
 
 const AdminRouters = () => {
+  const dispatch = useDispatch();
   const { auth, restaurant } = useSelector((store) => store);
-  return (
-    <div>
-      <Routes>
-        <Route
-          path="/*"
-          element={
-            
-            !restaurant.usersRestaurant ? (
-              <CreateRestaurantForm />
-            ) : (
-              <Admin />
-            )
-          }
-        />
-      </Routes>
-    </div>
-  );
+  const token = localStorage.getItem("jwt");
+
+  return <Admin />;
 };
 
 export default AdminRouters;

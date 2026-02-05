@@ -3,7 +3,9 @@ import RestaurantRequestTable from './RestaurantRequestTable'
 
 const RestaurantRequest = () => {
   return (
-    <div><RestaurantRequestTable name={"All Request"}/></div>
+    <div>
+      <RestaurantRequestTable name={"Restaurant Approval Requests"} />
+    </div>
   )
 }
 

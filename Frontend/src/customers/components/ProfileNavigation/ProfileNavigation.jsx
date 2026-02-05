@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../../State/Authentication/Action";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import EventIcon from "@mui/icons-material/Event";
+import BarChartIcon from "@mui/icons-material/BarChart";
 
 const menu = [
   { title: "Orders", icon: <ShoppingBagIcon /> },
@@ -18,6 +19,7 @@ const menu = [
   { title: "Payments", icon: <AccountBalanceWalletIcon /> },
   { title: "Notification", icon: <NotificationsIcon /> },
   { title: "Events", icon: <EventIcon /> },
+  { title: "Analytics", icon: <BarChartIcon /> },
   { title: "Logout", icon: <LogoutIcon /> },
 ];
 
@@ -46,7 +48,6 @@ const ProfileNavigation = ({ handleClose, open }) => {
         open={open}
         onClose={handleClose}
         variant={isSmallScreen ? "temporary" : "permanent"}
-        // variant="persistent"
       >
         <div className="w-[50vw] lg:w-[20vw] h-[100vh] flex flex-col justify-center text-xl space-y-8 pt-16">
           {menu.map((item, i) => (

@@ -2,12 +2,13 @@ import PersonIcon from "@mui/icons-material/Person";
 import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SearchIcon from "@mui/icons-material/Search";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { logout } from "../State/Authentication/Action";
 import Auth from "../customers/pages/Auth/Auth";
-import { IconButton } from "@mui/material";
+import { IconButton, Button } from "@mui/material";
 
 const AdminNavbar = ({ handleOpenSideBar }) => {
   const navigate = useNavigate();
@@ -32,6 +33,14 @@ const AdminNavbar = ({ handleOpenSideBar }) => {
 
       {/* Animated notification indicator */}
       <div className="flex items-center space-x-3">
+        <Button
+          onClick={() => navigate("/admin/restaurant")}
+          startIcon={<DashboardIcon />}
+          className="text-white hover:bg-white/10 transition-all duration-300"
+          sx={{ color: 'white', textTransform: 'none' }}
+        >
+          Dashboard
+        </Button>
         <div className="relative">
           <IconButton className="text-white hover:bg-white/10 transition-all duration-300">
             <ShoppingCartIcon className="text-white" />

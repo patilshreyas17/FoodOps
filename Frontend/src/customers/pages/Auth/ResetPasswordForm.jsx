@@ -28,7 +28,6 @@ function ResetPasswordForm() {
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
-    // Handle form submission here
     console.log(values);
     if (values.password === values.confirmedPassword) {
       console.log("yes its working....");

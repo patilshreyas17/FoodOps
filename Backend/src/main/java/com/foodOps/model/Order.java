@@ -1,6 +1,5 @@
 package com.foodOps.model;
 
-
 import java.util.Date;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class Order {
 	private Restaurant restaurant;
 
 	private Long totalAmount;
-	
+
 	private String orderStatus;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -49,15 +48,14 @@ public class Order {
 	@ManyToOne
 	private Address deliveryAddress;
 
-//	@JsonIgnore
 	@OneToMany
 	private List<OrderItem> items;
 
 	@OneToOne
 	private Payment payment;
-	
+
 	private int totalItem;
-	
+
 	private int totalPrice;
 
 }

@@ -29,6 +29,7 @@ import com.foodOps.repository.OrderRepository;
 import com.foodOps.repository.RestaurantRepository;
 import com.foodOps.repository.UserRepository;
 import com.foodOps.request.CreateOrderRequest;
+
 @Service
 public class OrderServiceImplementation implements OrderService {
 
@@ -52,29 +53,23 @@ public class OrderServiceImplementation implements OrderService {
     @Autowired
     private NotificationService notificationService;
 
-
-
-
     @Override
-    public PaymentResponse createOrder(CreateOrderRequest order,User user) throws UserException, RestaurantException, CartException, RazorpayException {
+    public PaymentResponse createOrder(CreateOrderRequest order, User user)
+            throws UserException, RestaurantException, CartException, RazorpayException {
 
         Address shippAddress = order.getDeliveryAddress();
 
-
         Address savedAddress = addressRepository.save(shippAddress);
 
-        if(!user.getAddresses().contains(savedAddress)) {
+        if (!user.getAddresses().contains(savedAddress)) {
             user.getAddresses().add(savedAddress);
         }
-
-
-
 
         userRepository.save(user);
 
         Optional<Restaurant> restaurant = restaurantRepository.findById(order.getRestaurantId());
-        if(restaurant.isEmpty()) {
-            throw new RestaurantException("Restaurant not found with id "+order.getRestaurantId());
+        if (restaurant.isEmpty()) {
+            throw new RestaurantException("Restaurant not found with id " + order.getRestaurantId());
         }
 
         Order createdOrder = new Order();
@@ -94,7 +89,7 @@ public class OrderServiceImplementation implements OrderService {
             orderItem.setFood(cartItem.getFood());
             orderItem.setIngredients(cartItem.getIngredients());
             orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setTotalPrice(cartItem.getFood().getPrice()* cartItem.getQuantity());
+            orderItem.setTotalPrice(cartItem.getFood().getPrice() * cartItem.getQuantity());
 
             OrderItem savedOrderItem = orderItemRepository.save(orderItem);
             orderItems.add(savedOrderItem);
@@ -112,19 +107,16 @@ public class OrderServiceImplementation implements OrderService {
 
         restaurantRepository.save(restaurant.get());
 
-
-
-
-        PaymentResponse res=paymentSerive.createRazorpayPaymentLink(savedOrder);
+        PaymentResponse res = paymentSerive.createRazorpayPaymentLink(savedOrder);
         return res;
 
     }
 
     @Override
     public void cancelOrder(Long orderId) throws OrderException {
-        Order order =findOrderById(orderId);
-        if(order==null) {
-            throw new OrderException("Order not found with the id "+orderId);
+        Order order = findOrderById(orderId);
+        if (order == null) {
+            throw new OrderException("Order not found with the id " + orderId);
         }
 
         orderRepository.deleteById(orderId);
@@ -133,55 +125,45 @@ public class OrderServiceImplementation implements OrderService {
 
     public Order findOrderById(Long orderId) throws OrderException {
         Optional<Order> order = orderRepository.findById(orderId);
-        if(order.isPresent()) return order.get();
+        if (order.isPresent())
+            return order.get();
 
-        throw new OrderException("Order not found with the id "+orderId);
+        throw new OrderException("Order not found with the id " + orderId);
     }
 
     @Override
     public List<Order> getUserOrders(Long userId) throws OrderException {
-        List<Order> orders=orderRepository.findAllUserOrders(userId);
+        List<Order> orders = orderRepository.findAllUserOrders(userId);
         return orders;
     }
 
     @Override
-    public List<Order> getOrdersOfRestaurant(Long restaurantId,String orderStatus) throws OrderException, RestaurantException {
+    public List<Order> getOrdersOfRestaurant(Long restaurantId, String orderStatus)
+            throws OrderException, RestaurantException {
 
         List<Order> orders = orderRepository.findOrdersByRestaurantId(restaurantId);
 
-        if(orderStatus!=null) {
+        if (orderStatus != null) {
             orders = orders.stream()
-                    .filter(order->order.getOrderStatus().equals(orderStatus))
+                    .filter(order -> order.getOrderStatus().equals(orderStatus))
                     .collect(Collectors.toList());
         }
 
         return orders;
     }
-//    private List<MenuItem> filterByVegetarian(List<MenuItem> menuItems, boolean isVegetarian) {
-//    return menuItems.stream()
-//            .filter(menuItem -> menuItem.isVegetarian() == isVegetarian)
-//            .collect(Collectors.toList());
-//}
-
-
 
     @Override
     public Order updateOrder(Long orderId, String orderStatus) throws OrderException {
-        Order order=findOrderById(orderId);
+        Order order = findOrderById(orderId);
 
-
-
-        if(orderStatus.equals("OUT_FOR_DELIVERY") || orderStatus.equals("DELIVERED")
+        if (orderStatus.equals("OUT_FOR_DELIVERY") || orderStatus.equals("DELIVERED")
                 || orderStatus.equals("COMPLETED") || orderStatus.equals("PENDING")) {
             order.setOrderStatus(orderStatus);
-            Notification notification=notificationService.sendOrderStatusNotification(order);
+            Notification notification = notificationService.sendOrderStatusNotification(order);
             return orderRepository.save(order);
-        }
-        else throw new OrderException("Please Select A Valid Order Status");
-
+        } else
+            throw new OrderException("Please Select A Valid Order Status");
 
     }
-
-
 
 }

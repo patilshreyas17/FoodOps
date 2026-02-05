@@ -28,52 +28,64 @@ import com.foodOps.service.UserService;
 public class AdminRestaurantController {
 	@Autowired
 	private RestaurantService restaurantService;
-	
+
 	@Autowired
 	private UserService userService;
 
 	@PostMapping()
 	public ResponseEntity<Restaurant> createRestaurant(
 			@RequestBody CreateRestaurantRequest req,
-			@RequestHeader("Authorization") String jwt) throws UserException {
+			@RequestHeader("Authorization") String jwt) throws UserException, RestaurantException {
 
-			User user = userService.findUserProfileByJwt(jwt);
-		
-			System.out.println("----TRUE___-----"+jwt);
-			Restaurant restaurant = restaurantService.createRestaurant(req,user);
-			return ResponseEntity.ok(restaurant);
+		User user = userService.findUserProfileByJwt(jwt);
+
+		if (!user.getRole().name().equals("ROLE_RESTAURANT_OWNER")) {
+			throw new UserException("Access denied. Only Restaurant Owners can create restaurants.");
+		}
+
+		Restaurant existingRestaurant = restaurantService.getRestaurantsByUserId(user.getId());
+		if (existingRestaurant != null) {
+			throw new UserException(
+					"You already have a restaurant. Please edit your existing restaurant instead of creating a new one.");
+		}
+
+		System.out.println("----TRUE___-----" + jwt);
+		Restaurant restaurant = restaurantService.createRestaurant(req, user);
+		return ResponseEntity.ok(restaurant);
 	}
-
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Restaurant> updateRestaurant(@PathVariable Long id, @RequestBody CreateRestaurantRequest req,
 			@RequestHeader("Authorization") String jwt) throws RestaurantException, UserException {
 		User user = userService.findUserProfileByJwt(jwt);
-		
-			Restaurant restaurant = restaurantService.updateRestaurant(id, req);
-			return ResponseEntity.ok(restaurant);
-		
+
+		if (!user.getRole().name().equals("ROLE_RESTAURANT_OWNER")) {
+			throw new UserException("Access denied. Only Restaurant Owners can update restaurants.");
+		}
+
+		Restaurant restaurant = restaurantService.updateRestaurant(id, req);
+		return ResponseEntity.ok(restaurant);
+
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse> deleteRestaurantById(@PathVariable("id") Long restaurantId,
 			@RequestHeader("Authorization") String jwt) throws RestaurantException, UserException {
 		User user = userService.findUserProfileByJwt(jwt);
-		
-			restaurantService.deleteRestaurant(restaurantId);
-			
-			ApiResponse res=new ApiResponse("Restaurant Deleted with id Successfully",true);
-			return ResponseEntity.ok(res);
+
+		restaurantService.deleteRestaurant(restaurantId);
+
+		ApiResponse res = new ApiResponse("Restaurant Deleted with id Successfully", true);
+		return ResponseEntity.ok(res);
 	}
 
-	
 	@PutMapping("/{id}/status")
 	public ResponseEntity<Restaurant> updateStataurantStatus(
 			@RequestHeader("Authorization") String jwt,
 			@PathVariable Long id) throws RestaurantException, UserException {
-		
-			Restaurant restaurant = restaurantService.updateRestaurantStatus(id);
-			return ResponseEntity.ok(restaurant);
+
+		Restaurant restaurant = restaurantService.updateRestaurantStatus(id);
+		return ResponseEntity.ok(restaurant);
 
 	}
 
@@ -85,7 +97,5 @@ public class AdminRestaurantController {
 		return ResponseEntity.ok(restaurant);
 
 	}
-	
-	
 
 }

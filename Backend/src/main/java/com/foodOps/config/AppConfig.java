@@ -16,7 +16,6 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-
 import jakarta.servlet.http.HttpServletRequest;
 
 @Configuration
@@ -29,35 +28,27 @@ public class AppConfig {
 
     @Value("${app.cors.origins}")
     private List<String> allowedOrigins;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
 
-                        // Swagger and docs
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
-                        // Admin paths
                         .requestMatchers("/api/admin/**").hasAnyRole("RESTAURANT_OWNER", "ADMIN")
 
-                        // Any other api path requires authentication
                         .requestMatchers("/api/**").authenticated()
-                        .requestMatchers("/error").permitAll()
-                )
-
+                        .requestMatchers("/error").permitAll())
 
                 .addFilterBefore(
                         jwtTokenValidator,
-                        BasicAuthenticationFilter.class
-                )
+                        BasicAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
@@ -66,9 +57,8 @@ public class AppConfig {
         return http.build();
     }
 
-
     private CorsConfigurationSource corsConfigurationSource() {
-        return  new CorsConfigurationSource() {
+        return new CorsConfigurationSource() {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration config = new CorsConfiguration();
@@ -82,6 +72,7 @@ public class AppConfig {
             }
         };
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.foodOps.Exception.CartException;
 import com.foodOps.Exception.OrderException;
 import com.foodOps.Exception.RestaurantException;
+import com.foodOps.Exception.ResourceNotFoundException;
 import com.foodOps.Exception.UserException;
+import com.foodOps.Exception.ValidationException;
 import com.foodOps.model.Order;
 import com.foodOps.model.PaymentResponse;
 import com.foodOps.model.User;
@@ -35,41 +37,36 @@ public class OrderController {
 	private OrderService orderService;
 	@Autowired
 	private UserService userService;
-	
-    @PostMapping("/order")
-	public ResponseEntity<PaymentResponse>  createOrder(@RequestBody CreateOrderRequest order,
-			@RequestHeader("Authorization") String jwt) 
-					throws UserException, RestaurantException, 
-					CartException,
-                    RazorpayException,
-					OrderException{
-		User user=userService.findUserProfileByJwt(jwt);
-		System.out.println("req user "+user.getEmail());
-    	if(order!=null) {
-			PaymentResponse res = orderService.createOrder(order,user);
-			return ResponseEntity.ok(res);
-			
-    	}else throw new OrderException("Please provide valid request body");
-		
-    }
-    
- 
-    
-    @GetMapping("/order/user")
-    public ResponseEntity<List<Order>> getAllUserOrders(	@RequestHeader("Authorization") String jwt) throws OrderException, UserException{
-    
-    	User user=userService.findUserProfileByJwt(jwt);
-    	
-    	if(user.getId()!=null) {
-    	List<Order> userOrders = orderService.getUserOrders(user.getId());
-    	return ResponseEntity.ok(userOrders);
-    	}else {
-    		return new ResponseEntity<List<Order>>(HttpStatus.BAD_REQUEST);
-    	}
-    }
-    
 
-    
+	@PostMapping("/order")
+	public ResponseEntity<PaymentResponse> createOrder(@RequestBody CreateOrderRequest order,
+			@RequestHeader("Authorization") String jwt)
+			throws UserException, RestaurantException,
+			CartException,
+			RazorpayException,
+			OrderException, ValidationException {
+		User user = userService.findUserProfileByJwt(jwt);
+		System.out.println("req user " + user.getEmail());
+		if (order == null) {
+			throw new ValidationException("order", "Order request cannot be null", null);
+		}
+		PaymentResponse res = orderService.createOrder(order, user);
+		return ResponseEntity.ok(res);
 
-	
+	}
+
+	@GetMapping("/order/user")
+	public ResponseEntity<List<Order>> getAllUserOrders(@RequestHeader("Authorization") String jwt)
+			throws OrderException, UserException {
+
+		User user = userService.findUserProfileByJwt(jwt);
+
+		if (user.getId() != null) {
+			List<Order> userOrders = orderService.getUserOrders(user.getId());
+			return ResponseEntity.ok(userOrders);
+		} else {
+			return new ResponseEntity<List<Order>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
 }

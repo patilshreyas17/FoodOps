@@ -48,7 +48,6 @@ const authReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: null,
-        // favorites:[action.payload,...state.favorites],
         favorites: isPresentInFavorites(state.favorites, action.payload)
           ? state.favorites.filter((item) => item.id !== action.payload.id)
           : [action.payload, ...state.favorites],
@@ -69,7 +68,7 @@ const authReducer = (state = initialState, action) => {
         user: action.payload,
         favorites: action.payload.favorites,
       };
-      
+
     case REQUEST_RESET_PASSWORD_SUCCESS:
       return {
         ...state,

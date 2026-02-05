@@ -8,7 +8,6 @@ const Map = ({ setCoords, setBounds, coords, places, setChildClicked, onError })
   const isDesktop = useMediaQuery('(min-width:600px)');
 
   useEffect(() => {
-    // Check if Google Maps API is available
     const checkGoogleMaps = () => {
       if (typeof window.google === 'undefined' || !window.google.maps) {
         setMapError(true);
@@ -16,7 +15,6 @@ const Map = ({ setCoords, setBounds, coords, places, setChildClicked, onError })
       }
     };
 
-    // Check after a short delay to allow Google Maps to load
     const timer = setTimeout(checkGoogleMaps, 2000);
     return () => clearTimeout(timer);
   }, [onError]);

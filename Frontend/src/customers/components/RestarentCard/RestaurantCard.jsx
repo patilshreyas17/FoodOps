@@ -11,22 +11,22 @@ import { isPresentInFavorites } from "../../../config/logic";
 const RestaurantCard = ({ data, index }) => {
   const navigate = useNavigate();
   const { auth } = useSelector((store) => store);
-  const jwt=localStorage.getItem("jwt");
+  const jwt = localStorage.getItem("jwt");
 
   const dispatch = useDispatch();
 
   const handleAddToFavorites = () => {
-    dispatch(addToFavorites({restaurantId:data.id,jwt:auth.jwt||jwt}));
+    dispatch(addToFavorites({ restaurantId: data.id, jwt: auth.jwt || jwt }));
   };
 
   const navigateToRestaurant = () => {
-    if(data.open)
-    navigate(`/restaurant/${data.address.city}/${data.name}/${data.id}`);
+    if (data.open)
+      navigate(`/restaurant/${data.address.city}/${data.name}/${data.id}`);
   };
 
   return (
     <Card className="m-5 w-[18rem] productCard ">
-      <div onClick={navigateToRestaurant} className={`${data.open?"cursor-pointer":"cursor-not-allowed"}  relative`}>
+      <div onClick={navigateToRestaurant} className={`${data.open ? "cursor-pointer" : "cursor-not-allowed"}  relative`}>
         <img
           className="w-full h-[10rem] rounded-t-md object-cover "
           src={data.images[0]}
@@ -34,9 +34,8 @@ const RestaurantCard = ({ data, index }) => {
         />
         <Chip
           size="small"
-          // variant="outlined"
           className="absolute top-2 left-2"
-          color={data.open?"success":"error"}
+          color={data.open ? "success" : "error"}
           label={data.open ? "Open" : "Closed"}
         />
       </div>

@@ -1,10 +1,10 @@
 import React from 'react'
-import RestaurantTable from './RestaurantTable'
+import SuperAdminRestaurantManagement from './SuperAdminRestaurantManagement'
 
 const SuperAdminRestaurant = () => {
   return (
     <div>
-        <RestaurantTable name={"All Restaurants"}/>
+      <SuperAdminRestaurantManagement />
     </div>
   )
 }

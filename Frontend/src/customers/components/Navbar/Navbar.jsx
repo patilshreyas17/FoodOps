@@ -51,13 +51,6 @@ const Navbar = () => {
     navigate("/");
   };
 
-  // useEffect(()=>{
-  //   if(auth.user?.fullName){
-  //     // handleCloseAuthModel()
-  //   }
-
-  // },[auth.user])
-
   const handleLogout = () => {
     dispatch(logout());
     handleCloseMenu();
@@ -122,8 +115,8 @@ const Navbar = () => {
             <MenuItem
               onClick={() =>
                 auth.user?.role === "ROLE_ADMIN"
-                  ? navigate("/admin")
-                  : navigate("/super-admin")
+                  ? navigate("/super-admin")
+                  : navigateToProfile
               }
             >
               Profile

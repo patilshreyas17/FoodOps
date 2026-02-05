@@ -7,7 +7,7 @@ import Map from './components/Map/Map';
 const MapTravel = () => {
   const [places, setPlaces] = useState([]);
   const [filteredPlaces, setFilteredPlaces] = useState([]);
-  const [coords, setCoords] = useState({ lat: 40.7128, lng: -74.0060 }); // Default to NYC
+  const [coords, setCoords] = useState({ lat: 40.7128, lng: -74.0060 });
   const [bounds, setBounds] = useState({});
   const [childClicked, setChildClicked] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +24,7 @@ const MapTravel = () => {
         },
         (error) => {
           console.log('Geolocation error, using default location:', error);
-          setCoords({ lat: 40.7128, lng: -74.0060 }); // Default to NYC
+          setCoords({ lat: 40.7128, lng: -74.0060 });
         }
       );
     }

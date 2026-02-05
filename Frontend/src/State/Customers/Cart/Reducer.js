@@ -1,4 +1,3 @@
-// Reducers.js
 import { LOGOUT } from "../../Authentication/ActionType";
 import * as actionTypes from "./ActionTypes";
 
@@ -53,16 +52,15 @@ const cartReducer = (state = initialState, action) => {
     case actionTypes.FIND_CART_FAILURE:
     case actionTypes.UPDATE_CARTITEM_FAILURE:
     case actionTypes.REMOVE_CARTITEM_FAILURE:
-      // case actionTypes.GET_ALL_CART_ITEMS_FAILURE:
       return {
         ...state,
         loading: false,
         error: action.payload,
       };
 
-      case LOGOUT:
+    case LOGOUT:
       localStorage.removeItem("jwt");
-      return { ...state, cartItems:[],cart:null, success: "logout success" };
+      return { ...state, cartItems: [], cart: null, success: "logout success" };
     default:
       return state;
   }

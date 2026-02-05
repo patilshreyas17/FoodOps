@@ -6,27 +6,22 @@ import Customers from "./SuperAdminCustomerTable/Customers";
 import RestaurantTable from "./Restaurants/RestaurantTable";
 import SuperAdminRestaurant from "./Restaurants/SuperAdminRestaurant";
 import RestaurantRequest from "./RestaurantRequest/RestaurantRequest";
-// import AdminDashboard from "./Dashboard/AdminDashboard";
-// import AdminSidebar from "./AdminSidebar";
-// import RestaurantDashboard from "./Dashboard/RestaurantDashboard";
-// import RestaurantsOrder from "./Orders/RestaurantsOrder";
-// import RestaurantsMenu from "./MenuItem/RestaurantsMenu";
-// import AddMenuForm from "./AddMenu/AddMenuForm";
-// import CreateRestaurantForm from "./AddRestaurants/CreateRestaurantForm";
+import SuperAdminDashboard from "./SuperAdminDashboard/SuperAdminDashboard";
+import SuperAdminAnalytics from "./Analytics/SuperAdminAnalytics";
 
 const SuperAdmin = () => {
   return (
-    <div className="lg:flex justify-between">
-      <div className="">
-       
-        <SuperAdminSidebar />
+    <div className="flex min-h-screen">
+      <div className="w-52 flex-shrink-0">
+        <SuperAdminSidebar open={true} handleClose={() => { }} />
       </div>
 
-      <div className="w-[80vw]">
+      <div className="flex-1 p-6">
         <Routes>
-          <Route path="/customers" element={<Customers/>}></Route>
-          <Route path="/restaurants" element={<SuperAdminRestaurant/>}></Route>
-          <Route path="/restaurant-request" element={<RestaurantRequest/>}></Route>
+          <Route path="/" element={<SuperAdminDashboard />}></Route>
+          <Route path="/customers" element={<Customers />}></Route>
+          <Route path="/restaurants" element={<SuperAdminRestaurant />}></Route>
+          <Route path="/restaurant-request" element={<RestaurantRequest />}></Route>
         </Routes>
       </div>
     </div>

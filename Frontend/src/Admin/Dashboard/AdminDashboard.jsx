@@ -1,20 +1,25 @@
 import React, { useEffect } from "react";
-import RestaurantCard from "./RestaurantCard";
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getRestaurantByUserId } from "../../State/Customers/Restaurant/restaurant.action";
-import AddressCard from "../../customers/components/Address/AddressCard";
-import AddRestaurantCard from "./AddRestaurantCard";
+import AddIcon from "@mui/icons-material/Add";
+import { Box, Typography, Card, CardContent, Button, Grid } from "@mui/material";
 
 const AdminDashboard = () => {
-  const params = useParams();
+  const navigate = useNavigate();
   const { restaurant } = useSelector(state => state);
-  console.log("params", params);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getRestaurantByUserId());
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      dispatch(getRestaurantByUserId(token));
+    }
   }, []);
+
+  const handleCreateRestaurant = () => {
+    navigate("/admin/add-restaurant");
+  };
 
   return (
     <section className="px-4 lg:px-8 py-8 relative">
@@ -34,57 +39,130 @@ const AdminDashboard = () => {
           </p>
         </div>
 
-        {/* Stats cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="glass-emerald rounded-2xl p-6 border border-emerald-400/20 shadow-glow transform transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-glow-lg">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-emerald-300 text-sm font-inter mb-1">Total Restaurants</p>
-                <p className="text-3xl font-plus-jakarta font-extrabold text-white">{restaurant.usersRestaurant?.length || 0}</p>
-              </div>
-              <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center">
-                <div className="w-6 h-6 bg-emerald-400 rounded-full animate-pulse"></div>
-              </div>
-            </div>
+        {/* Create Restaurant Button - Only show if no restaurant exists */}
+        {(!restaurant.usersRestaurant || restaurant.usersRestaurant === '') && (
+          <div className="flex justify-center mb-8">
+            <Button
+              onClick={handleCreateRestaurant}
+              variant="contained"
+              startIcon={<AddIcon />}
+              className="bg-gradient-to-r from-ocean-500 to-emerald-500 hover:from-ocean-600 hover:to-emerald-600 text-white font-plus-jakarta font-semibold py-3 px-8 rounded-xl shadow-neon transform transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-neon-lg"
+            >
+              Create Restaurant
+            </Button>
           </div>
-
-          <div className="glass-ocean rounded-2xl p-6 border border-ocean-400/20 shadow-neon transform transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-neon-lg">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-ocean-300 text-sm font-inter mb-1">Active Orders</p>
-                <p className="text-3xl font-plus-jakarta font-extrabold text-white">24</p>
-              </div>
-              <div className="w-12 h-12 bg-ocean-500/20 rounded-full flex items-center justify-center">
-                <div className="w-6 h-6 bg-ocean-400 rounded-full animate-pulse"></div>
-              </div>
-            </div>
-          </div>
-
-          <div className="glass-aurora rounded-2xl p-6 border border-aurora-400/20 shadow-glow transform transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-glow-lg">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-aurora-300 text-sm font-inter mb-1">Revenue Today</p>
-                <p className="text-3xl font-plus-jakarta font-extrabold text-white">$1,247</p>
-              </div>
-              <div className="w-12 h-12 bg-aurora-500/20 rounded-full flex items-center justify-center">
-                <div className="w-6 h-6 bg-aurora-400 rounded-full animate-pulse"></div>
-              </div>
-            </div>
-          </div>
-        </div>
+        )}
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
-        {restaurant.usersRestaurant.map((item) => (
-          <article key={item.id} className="transform transition-all duration-300 ease-in-out hover:scale-[1.02] hover:-translate-y-2 animate-fade-in">
-            <RestaurantCard item={item} />
-          </article>
-        ))}
-        {restaurant.usersRestaurant.length < 1 && (
-          <article className="transform transition-all duration-300 ease-in-out hover:scale-[1.02] hover:-translate-y-2 animate-fade-in">
-            <AddRestaurantCard />
-          </article>
-        )}
+      {/* Restaurant Details Section */}
+      <div className="relative z-10">
+        <Grid container spacing={3}>
+          {restaurant.usersRestaurant && restaurant.usersRestaurant !== '' ? (
+            <Grid item xs={12}>
+              <Card className="glass-midnight rounded-2xl p-6 border border-ocean-400/20 shadow-neon">
+                <CardContent>
+                  <Typography variant="h5" className="text-white font-plus-jakarta font-bold mb-4">
+                    {restaurant.usersRestaurant.approvalStatus === 'PENDING' ? 'Restaurant Under Review' :
+                      restaurant.usersRestaurant.approvalStatus === 'REJECTED' ? 'Restaurant Rejected - Please Update' :
+                        'Your Restaurant Details'}
+                  </Typography>
+
+                  {restaurant.usersRestaurant.approvalStatus === 'PENDING' && (
+                    <Box className="mb-4 p-4 bg-yellow-500/10 border border-yellow-400/20 rounded-lg">
+                      <Typography variant="body1" className="text-yellow-300 mb-2">
+                        ⏳ Your restaurant is pending approval from the admin.
+                      </Typography>
+                      <Typography variant="body2" className="text-yellow-200 mb-2">
+                        You can edit your details below to make changes while waiting for approval.
+                      </Typography>
+                      <Typography variant="body2" className="text-yellow-100 text-sm">
+                        📊 Analytics will be available once your restaurant is approved.
+                      </Typography>
+                    </Box>
+                  )}
+
+                  {restaurant.usersRestaurant.approvalStatus === 'REJECTED' && (
+                    <Box className="mb-4 p-4 bg-red-500/10 border border-red-400/20 rounded-lg">
+                      <Typography variant="body1" className="text-red-300 mb-2">
+                        ❌ Your restaurant was rejected by the admin.
+                      </Typography>
+                      <Typography variant="body2" className="text-red-200 mb-2">
+                        Update your restaurant details below to resubmit for approval.
+                      </Typography>
+                      <Typography variant="body2" className="text-red-100 text-sm">
+                        📊 Analytics will be available once your restaurant is approved.
+                      </Typography>
+                    </Box>
+                  )}
+
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} md={6}>
+                      <Typography variant="body2" className="text-ocean-300">
+                        <strong>Name:</strong> {restaurant.usersRestaurant.name}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Typography variant="body2" className="text-ocean-300">
+                        <strong>Status:</strong>
+                        <span className={`ml-2 px-2 py-1 rounded text-xs ${restaurant.usersRestaurant.approvalStatus === 'APPROVED'
+                          ? 'bg-green-500/20 text-green-300'
+                          : restaurant.usersRestaurant.approvalStatus === 'PENDING'
+                            ? 'bg-yellow-500/20 text-yellow-300'
+                            : 'bg-red-500/20 text-red-300'
+                          }`}>
+                          {restaurant.usersRestaurant.approvalStatus || 'PENDING'}
+                        </span>
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Typography variant="body2" className="text-ocean-300">
+                        <strong>Cuisine:</strong> {restaurant.usersRestaurant.cuisineType}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Typography variant="body2" className="text-ocean-300">
+                        <strong>Contact:</strong> {restaurant.usersRestaurant.contactInformation?.email || 'N/A'}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+
+                  {/* Edit Button */}
+                  <Box className="mt-4">
+                    <Button
+                      onClick={() => navigate(`/admin/edit-restaurant/${restaurant.usersRestaurant.id}`)}
+                      variant="outlined"
+                      startIcon={<AddIcon />}
+                      className="border-ocean-400 text-ocean-300 hover:border-ocean-300 hover:text-ocean-200"
+                    >
+                      Edit Restaurant Details
+                    </Button>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+          ) : (
+            <Grid item xs={12}>
+              <Card className="glass-midnight rounded-2xl p-8 border border-ocean-400/20 shadow-neon text-center">
+                <CardContent>
+                  <Typography variant="h5" className="text-white font-plus-jakarta font-bold mb-4">
+                    No Restaurant Yet
+                  </Typography>
+                  <Typography variant="body1" className="text-ocean-300 mb-4">
+                    Create your first restaurant to start managing your business
+                  </Typography>
+                  <Button
+                    onClick={handleCreateRestaurant}
+                    variant="outlined"
+                    startIcon={<AddIcon />}
+                    className="border-ocean-400 text-ocean-300 hover:border-ocean-300 hover:text-ocean-200"
+                  >
+                    Get Started
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+          )}
+        </Grid>
       </div>
     </section>
   );

@@ -22,17 +22,16 @@ public class RestaurantServiceImplementation implements RestaurantService {
 	private RestaurantRepository restaurantRepository;
 	@Autowired
 	private AddressRepository addressRepository;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
 
 	@Override
-	public Restaurant createRestaurant(CreateRestaurantRequest req,User user) {
-		Address address=new Address();
+	public Restaurant createRestaurant(CreateRestaurantRequest req, User user) {
+		Address address = new Address();
 		address.setCity(req.getAddress().getCity());
 		address.setCountry(req.getAddress().getCountry());
 		address.setFullName(req.getAddress().getFullName());
@@ -40,9 +39,9 @@ public class RestaurantServiceImplementation implements RestaurantService {
 		address.setState(req.getAddress().getState());
 		address.setStreetAddress(req.getAddress().getStreetAddress());
 		Address savedAddress = addressRepository.save(address);
-		
+
 		Restaurant restaurant = new Restaurant();
-		
+
 		restaurant.setAddress(savedAddress);
 		restaurant.setContactInformation(req.getContactInformation());
 		restaurant.setCuisineType(req.getCuisineType());
@@ -52,6 +51,7 @@ public class RestaurantServiceImplementation implements RestaurantService {
 		restaurant.setOpeningHours(req.getOpeningHours());
 		restaurant.setRegistrationDate(req.getRegistrationDate());
 		restaurant.setOwner(user);
+		restaurant.setApprovalStatus("PENDING");
 		Restaurant savedRestaurant = restaurantRepository.save(restaurant);
 
 		return savedRestaurant;
@@ -61,15 +61,62 @@ public class RestaurantServiceImplementation implements RestaurantService {
 	public Restaurant updateRestaurant(Long restaurantId, CreateRestaurantRequest updatedReq)
 			throws RestaurantException {
 		Restaurant restaurant = findRestaurantById(restaurantId);
-		if (restaurant.getCuisineType() != null) {
+
+		restaurant.setApprovalStatus("PENDING");
+
+		if (updatedReq.getName() != null) {
+			restaurant.setName(updatedReq.getName());
+		}
+		if (updatedReq.getCuisineType() != null) {
 			restaurant.setCuisineType(updatedReq.getCuisineType());
 		}
-		if (restaurant.getDescription() != null) {
+		if (updatedReq.getDescription() != null) {
 			restaurant.setDescription(updatedReq.getDescription());
 		}
+		if (updatedReq.getOpeningHours() != null) {
+			restaurant.setOpeningHours(updatedReq.getOpeningHours());
+		}
+		if (updatedReq.getImages() != null) {
+			restaurant.setImages(updatedReq.getImages());
+		}
+
+		if (updatedReq.getContactInformation() != null) {
+			restaurant.setContactInformation(updatedReq.getContactInformation());
+		}
+
+		if (updatedReq.getAddress() != null) {
+			Address address = restaurant.getAddress();
+			if (address == null) {
+				address = new Address();
+				address = addressRepository.save(address);
+				restaurant.setAddress(address);
+			}
+
+			if (updatedReq.getAddress().getStreetAddress() != null) {
+				address.setStreetAddress(updatedReq.getAddress().getStreetAddress());
+			}
+			if (updatedReq.getAddress().getCity() != null) {
+				address.setCity(updatedReq.getAddress().getCity());
+			}
+			if (updatedReq.getAddress().getState() != null) {
+				address.setState(updatedReq.getAddress().getState());
+			}
+			if (updatedReq.getAddress().getPostalCode() != null) {
+				address.setPostalCode(updatedReq.getAddress().getPostalCode());
+			}
+			if (updatedReq.getAddress().getCountry() != null) {
+				address.setCountry(updatedReq.getAddress().getCountry());
+			}
+			if (updatedReq.getAddress().getFullName() != null) {
+				address.setFullName(updatedReq.getAddress().getFullName());
+			}
+
+			addressRepository.save(address);
+		}
+
 		return restaurantRepository.save(restaurant);
 	}
-	
+
 	@Override
 	public Restaurant findRestaurantById(Long restaurantId) throws RestaurantException {
 		Optional<Restaurant> restaurant = restaurantRepository.findById(restaurantId);
@@ -93,28 +140,30 @@ public class RestaurantServiceImplementation implements RestaurantService {
 
 	@Override
 	public List<Restaurant> getAllRestaurant() {
+		return restaurantRepository.findByApprovalStatus("APPROVED");
+	}
+
+	@Override
+	public List<Restaurant> getAllRestaurantsForAdmin() {
 		return restaurantRepository.findAll();
 	}
 
-
 	@Override
 	public Restaurant getRestaurantsByUserId(Long userId) throws RestaurantException {
-		Restaurant restaurants=restaurantRepository.findByOwnerId(userId);
+		Restaurant restaurants = restaurantRepository.findByOwnerId(userId);
 		return restaurants;
 	}
 
-
-
 	@Override
 	public List<Restaurant> searchRestaurant(String keyword) {
-		return restaurantRepository.findBySearchQuery(keyword);
+		return restaurantRepository.findBySearchQueryAndApprovalStatus(keyword, "APPROVED");
 	}
 
 	@Override
-	public RestaurantDto addToFavorites(Long restaurantId,User user) throws RestaurantException {
-		Restaurant restaurant=findRestaurantById(restaurantId);
-		
-		RestaurantDto dto=new RestaurantDto();
+	public RestaurantDto addToFavorites(Long restaurantId, User user) throws RestaurantException {
+		Restaurant restaurant = findRestaurantById(restaurantId);
+
+		RestaurantDto dto = new RestaurantDto();
 		dto.setTitle(restaurant.getName());
 		dto.setImages(restaurant.getImages());
 		dto.setId(restaurant.getId());
@@ -134,15 +183,34 @@ public class RestaurantServiceImplementation implements RestaurantService {
 		} else {
 			favorites.add(dto);
 		}
-		
+
 		User updatedUser = userRepository.save(user);
 		return dto;
 	}
 
 	@Override
 	public Restaurant updateRestaurantStatus(Long id) throws RestaurantException {
-		Restaurant restaurant=findRestaurantById(id);
+		Restaurant restaurant = findRestaurantById(id);
 		restaurant.setOpen(!restaurant.isOpen());
+		return restaurantRepository.save(restaurant);
+	}
+
+	@Override
+	public List<Restaurant> getPendingRestaurants() {
+		return restaurantRepository.findByApprovalStatus("PENDING");
+	}
+
+	@Override
+	public Restaurant approveRestaurant(Long restaurantId) throws RestaurantException {
+		Restaurant restaurant = findRestaurantById(restaurantId);
+		restaurant.setApprovalStatus("APPROVED");
+		return restaurantRepository.save(restaurant);
+	}
+
+	@Override
+	public Restaurant rejectRestaurant(Long restaurantId) throws RestaurantException {
+		Restaurant restaurant = findRestaurantById(restaurantId);
+		restaurant.setApprovalStatus("REJECTED");
 		return restaurantRepository.save(restaurant);
 	}
 

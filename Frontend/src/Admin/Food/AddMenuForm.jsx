@@ -9,18 +9,23 @@ import MenuItem from "@mui/material/MenuItem";
 import Grid from "@mui/material/Grid";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { useParams } from "react-router-dom";
 import {
   Alert,
   Box,
+  Card,
+  CardContent,
   Chip,
   CircularProgress,
   IconButton,
   OutlinedInput,
   Snackbar,
+  Typography,
 } from "@mui/material";
+import { Add } from "@mui/icons-material";
 import { uploadToCloudinary } from "../utils/UploadToCloudnary";
 import { createMenuItem } from "../../State/Customers/Menu/menu.action";
 
@@ -68,11 +73,63 @@ const initialValues = {
 };
 
 const AddMenuForm = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { restaurant, ingredients, auth ,menu} = useSelector((store) => store);
+  const { restaurant, ingredients, auth, menu } = useSelector((store) => store);
   const [uploadImage, setUploadingImage] = useState("");
   const jwt = localStorage.getItem("jwt");
+
+  if (!restaurant.usersRestaurant || restaurant.usersRestaurant === '') {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="60vh"
+      >
+        <Card
+          sx={{
+            maxWidth: 600,
+            textAlign: 'center',
+            p: 4,
+            backgroundColor: 'rgba(15, 23, 42, 0.8)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(14, 165, 233, 0.2)'
+          }}
+        >
+          <CardContent>
+            <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold', mb: 2 }}>
+              No Restaurant Yet
+            </Typography>
+            <Typography variant="body1" sx={{ color: '#94a3b8', mb: 2 }}>
+              You need to create your restaurant first before adding menu items.
+            </Typography>
+            <Typography variant="body2" sx={{ color: '#64748b', mb: 3 }}>
+              Once your restaurant is set up, you'll be able to create and manage your menu items here.
+            </Typography>
+            <Button
+              onClick={() => navigate("/admin/restaurant/add-restaurant")}
+              variant="contained"
+              startIcon={<Add />}
+              sx={{
+                background: 'linear-gradient(135deg, #0ea5e9 0%, #10b981 100%)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #0284c7 0%, #059669 100%)',
+                },
+                color: 'white',
+                fontWeight: 'bold',
+                py: 1.5,
+                px: 3
+              }}
+            >
+              Create Restaurant
+            </Button>
+          </CardContent>
+        </Card>
+      </Box>
+    );
+  }
 
   const formik = useFormik({
     initialValues,
@@ -102,7 +159,7 @@ const AddMenuForm = () => {
 
   useEffect(() => {
     if (menu.message || menu.error) setOpenSnackBar(true);
-  }, [menu.message,menu.error]);
+  }, [menu.message, menu.error]);
 
   const handleCloseSnackBar = () => {
     setOpenSnackBar(false);
@@ -255,7 +312,6 @@ const AddMenuForm = () => {
                       <MenuItem
                         key={item.id}
                         value={item}
-                        // style={getStyles(name, personName, theme)}
                       >
                         {item.name}
                       </MenuItem>
@@ -322,7 +378,6 @@ const AddMenuForm = () => {
         open={openSnackBar}
         autoHideDuration={3000}
         onClose={handleCloseSnackBar}
-        // handleClose={handleCloseSnackBar}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
         <Alert

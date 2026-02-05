@@ -11,15 +11,20 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 
 @Entity
+@Table(name = "users", uniqueConstraints = {
+		@UniqueConstraint(columnNames = "email")
+})
 @Data
 public class User {
 
@@ -28,6 +33,8 @@ public class User {
 	private Long id;
 
 	private String fullName;
+
+	@Column(unique = true)
 	private String email;
 	private String password;
 
@@ -38,11 +45,11 @@ public class User {
 	private List<Order> orders;
 
 	@ElementCollection
-	private List<RestaurantDto> favorites=new ArrayList<>();
-	
+	private List<RestaurantDto> favorites = new ArrayList<>();
+
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Address> addresses = new ArrayList<>();
-	
+
 	private String status;
 
 }

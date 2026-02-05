@@ -23,11 +23,17 @@ services:
       - SERVER_PORT=${DISCOVERY_SERVICE_PORT}
       - EUREKA_CLIENT_REGISTER_WITH_EUREKA=false
       - EUREKA_CLIENT_FETCH_REGISTRY=false
+      - EUREKA_SERVER_PEER_NODE_READ_TIMEOUT_MS=5000
+      - EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS=2000
+      - EUREKA_SERVER_RESPONSE_CACHE_UPDATE_INTERVAL_MS=30000
+      - EUREKA_SERVER_REGISTRY_SYNC_RETRIES=0
+      - EUREKA_SERVER_WAIT_TIME_IN_MS_WHEN_SYNC_EMPTY=0
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:${DISCOVERY_SERVICE_PORT}/" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:${DISCOVERY_SERVICE_PORT}/actuator/health" ]
       interval: 10s
-      timeout: 5s
-      retries: 5
+      timeout: 10s
+      retries: 10
+      start_period: 30s
 
   api-gateway:
     build: ./api-gateway
@@ -37,12 +43,14 @@ services:
       - "${GATEWAY_SERVICE_PORT}:${GATEWAY_SERVICE_PORT}"
     environment:
       - SERVER_PORT=${GATEWAY_SERVICE_PORT}
-
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://discovery-service:${DISCOVERY_SERVICE_PORT}/eureka/
-
+      - EUREKA_CLIENT_REGISTRY_FETCH_INTERVAL_SECONDS=5
+      - EUREKA_CLIENT_EUREKA_SERVER_CONNECT_TIMEOUT_SECONDS=10
+      - EUREKA_CLIENT_EUREKA_SERVER_READ_TIMEOUT_SECONDS=10
     depends_on:
       discovery-service:
         condition: service_healthy
+    restart: unless-stopped
 
   payment-service:
     build: ./payment-service
@@ -54,14 +62,16 @@ services:
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://discovery-service:${DISCOVERY_SERVICE_PORT}/eureka/
       - RAZORPAY_API_KEY=${RAZORPAY_API_KEY}
       - RAZORPAY_API_SECRET=${RAZORPAY_API_SECRET}
-      #- EUREKA_INSTANCE_INSTANCE_ID=payment-service:$${random.value}
+      - EUREKA_CLIENT_REGISTRY_FETCH_INTERVAL_SECONDS=5
+      - EUREKA_CLIENT_EUREKA_SERVER_CONNECT_TIMEOUT_SECONDS=10
+      - EUREKA_CLIENT_EUREKA_SERVER_READ_TIMEOUT_SECONDS=10
     depends_on:
       discovery-service:
         condition: service_healthy
+    restart: unless-stopped
   app:
     build: ./Backend
     container_name: foodops-app
-
     env_file: .env
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
@@ -75,9 +85,15 @@ services:
       - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
       - APP_CORS_ORIGINS=${CORS_ORIGINS}
+      - EUREKA_CLIENT_REGISTRY_FETCH_INTERVAL_SECONDS=5
+      - EUREKA_CLIENT_EUREKA_SERVER_CONNECT_TIMEOUT_SECONDS=10
+      - EUREKA_CLIENT_EUREKA_SERVER_READ_TIMEOUT_SECONDS=10
     depends_on:
       mysql:
         condition: service_healthy
+      discovery-service:
+        condition: service_healthy
+    restart: unless-stopped
   frontend:
     build:
       context: ./Frontend

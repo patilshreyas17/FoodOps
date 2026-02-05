@@ -22,18 +22,16 @@ import {
   UPDATE_MENU_ITEMS_AVAILABILITY_SUCCESS,
 } from "./ActionType";
 
-// localhost:5454/api/admin/ingredients/food/16
-
-export const createMenuItem = ({menu,jwt}) => {
+export const createMenuItem = ({ menu, jwt }) => {
   return async (dispatch) => {
     dispatch(createMenuItemRequest());
     try {
       const { data } = await api.post("api/admin/food", menu,
-      {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        });
       console.log("created menu ", data);
       dispatch(createMenuItemSuccess(data));
     } catch (error) {
@@ -64,11 +62,11 @@ export const getMenuItemsByRestaurantId = (reqData) => {
   };
 };
 
-export const searchMenuItem = ({keyword,jwt}) => {
+export const searchMenuItem = ({ keyword, jwt }) => {
   return async (dispatch) => {
     dispatch({ type: SEARCH_MENU_ITEM_REQUEST });
     try {
-      const { data } = await api.get(`api/food/search?name=${keyword}`,{
+      const { data } = await api.get(`api/food/search?name=${keyword}`, {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
@@ -101,11 +99,11 @@ export const getAllIngredientsOfMenuItem = (reqData) => {
   };
 };
 
-export const updateMenuItemsAvailability = ({foodId,jwt}) => {
+export const updateMenuItemsAvailability = ({ foodId, jwt }) => {
   return async (dispatch) => {
     dispatch({ type: UPDATE_MENU_ITEMS_AVAILABILITY_REQUEST });
     try {
-      const { data } = await api.put(`/api/admin/food/${foodId}`, {},{
+      const { data } = await api.put(`/api/admin/food/${foodId}`, {}, {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
@@ -113,16 +111,16 @@ export const updateMenuItemsAvailability = ({foodId,jwt}) => {
       console.log("update menuItems Availability ", data);
       dispatch({ type: UPDATE_MENU_ITEMS_AVAILABILITY_SUCCESS, payload: data });
     } catch (error) {
-      console.log("error ",error)
+      console.log("error ", error)
       dispatch({
         type: UPDATE_MENU_ITEMS_AVAILABILITY_FAILURE,
         payload: error,
       });
     }
-};
+  };
 };
 
-export const deleteFoodAction = ({foodId,jwt}) => async (dispatch) => {
+export const deleteFoodAction = ({ foodId, jwt }) => async (dispatch) => {
   dispatch({ type: DELETE_MENU_ITEM_REQUEST });
   try {
     const { data } = await api.delete(`/api/admin/food/${foodId}`, {

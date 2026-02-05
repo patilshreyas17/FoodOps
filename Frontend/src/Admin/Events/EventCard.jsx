@@ -11,8 +11,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch } from "react-redux";
 import { deleteEventAction } from "../../State/Customers/Restaurant/restaurant.action";
 
-const EventCard = ({ item,isCustomer }) => {
-  const dispatch=useDispatch();
+const EventCard = ({ item, isCustomer }) => {
+  const dispatch = useDispatch();
   const handleDeleteEvent = () => {
     dispatch(deleteEventAction(item.id))
   };
@@ -20,12 +20,13 @@ const EventCard = ({ item,isCustomer }) => {
     <div>
       <Card sx={{ width: 345 }}>
         <CardMedia
-          sx={{ height: 345,
+          sx={{
+            height: 345,
             '&:hover': {
-              transform: 'scale(1.1)', // Example: Scale the image on hover
-              transition: 'transform 0.5s ease-in-out', // Example: Apply a smooth transition effect
+              transform: 'scale(1.1)',
+              transition: 'transform 0.5s ease-in-out',
             },
-           }}
+          }}
           image={item.image}
           title="green iguana"
         />
@@ -43,7 +44,7 @@ const EventCard = ({ item,isCustomer }) => {
             <p className="text-sm text-red-500">{item.endsAt}</p>
           </div>
         </CardContent>
-    {!isCustomer &&    <CardActions>
+        {!isCustomer && <CardActions>
           <IconButton onClick={handleDeleteEvent} aria-label="add to favorites">
             <DeleteIcon />
           </IconButton>

@@ -27,13 +27,6 @@ import {
   fetchRestaurantsOrder,
   updateOrderStatus,
 } from "../../State/Admin/Order/restaurants.order.action";
-// import {
-//   confirmOrder,
-//   deleteOrder,
-//   deliveredOrder,
-//   getOrders,
-//   shipOrder,
-// } from "../../state/Admin/Order/Action";
 
 const orderStatus = [
   { label: "Pending", value: "PENDING" },
@@ -65,10 +58,9 @@ const OrdersTable = ({ isDashboard, name }) => {
 
   const handleUpdateOrder = (orderId, orderStatus, index) => {
     handleUpdateStatusMenuClose(index);
-    dispatch(updateOrderStatus({ orderId, orderStatus,jwt }));
+    dispatch(updateOrderStatus({ orderId, orderStatus, jwt }));
   };
 
-  // console.log("restaurants orders store ", restaurantsOrder)
 
   return (
     <Box>
@@ -85,15 +77,15 @@ const OrdersTable = ({ isDashboard, name }) => {
           <Table sx={{}} aria-label="table in dashboard">
             <TableHead>
               <TableRow>
-              <TableCell>Id</TableCell>
+                <TableCell>Id</TableCell>
                 <TableCell>Image</TableCell>
                 {/* {!isDashboard && <TableCell>Title</TableCell>} */}
                 <TableCell>Customer</TableCell>
                 <TableCell>Price</TableCell>
-             
+
                 <TableCell>Name</TableCell>
                 {!isDashboard && <TableCell>Ingredients</TableCell>}
-                {!isDashboard &&<TableCell>Status</TableCell>}
+                {!isDashboard && <TableCell>Status</TableCell>}
                 {!isDashboard && (
                   <TableCell sx={{ textAlign: "center" }}>Update</TableCell>
                 )}
@@ -131,7 +123,7 @@ const OrdersTable = ({ isDashboard, name }) => {
                     </TableCell>
 
                     <TableCell>₹{item?.totalAmount}</TableCell>
-                    
+
                     <TableCell className="">
                       {item.items.map((orderItem) => (
                         <p>
@@ -139,17 +131,17 @@ const OrdersTable = ({ isDashboard, name }) => {
                         </p>
                       ))}
                     </TableCell>
-                  {!isDashboard &&  <TableCell className="space-y-2">
+                    {!isDashboard && <TableCell className="space-y-2">
                       {item.items.map((orderItem) =>
-                      <div className="flex gap-1 flex-wrap">
-                       { orderItem.ingredients?.map((ingre) => (
-                          <Chip label={ingre} />
-                        ))}
-                      </div>
-                        
+                        <div className="flex gap-1 flex-wrap">
+                          {orderItem.ingredients?.map((ingre) => (
+                            <Chip label={ingre} />
+                          ))}
+                        </div>
+
                       )}
                     </TableCell>}
-                    {!isDashboard &&<TableCell className="text-white">
+                    {!isDashboard && <TableCell className="text-white">
                       <Chip
                         sx={{
                           color: "white !important",
@@ -162,8 +154,8 @@ const OrdersTable = ({ isDashboard, name }) => {
                           item.orderStatus === "PENDING"
                             ? "info"
                             : item?.orderStatus === "DELIVERED"
-                            ? "success"
-                            : "secondary"
+                              ? "success"
+                              : "secondary"
                         }
                         className="text-white"
                       />
@@ -226,7 +218,7 @@ const OrdersTable = ({ isDashboard, name }) => {
           </Table>
         </TableContainer>
       </Card>
-      
+
 
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}

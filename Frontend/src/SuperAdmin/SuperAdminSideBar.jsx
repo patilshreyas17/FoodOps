@@ -14,6 +14,7 @@ import ShopTwoIcon from "@mui/icons-material/ShopTwo";
 import { logout } from "../State/Authentication/Action";
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 const menu = [
 
@@ -27,8 +28,8 @@ export default function SuperAdminSidebar({ handleClose, open }) {
   const isSmallScreen = useMediaQuery("(max-width:1080px)");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {id} = useParams()
-  console.log("restaurantId ",id)
+  const { id } = useParams()
+  console.log("restaurantId ", id)
 
   const handleNavigate = (item) => {
     navigate(`/super-admin${item.path}`);
@@ -36,8 +37,8 @@ export default function SuperAdminSidebar({ handleClose, open }) {
       navigate("/");
       dispatch(logout());
     }
-    
-    
+
+
   };
 
   return (
@@ -49,9 +50,8 @@ export default function SuperAdminSidebar({ handleClose, open }) {
           open={open}
           onClose={handleClose}
           variant={isSmallScreen ? "temporary" : "permanent"}
-          // variant="persistent"
         >
-          <div className="w-[50vw] lg:w-[20vw] group h-[100vh] flex flex-col justify-center text-xl space-y-8">
+          <div className="w-52 group h-screen flex flex-col justify-center text-xl space-y-8">
             <Divider verticle />
             {menu.map((item, i) => (
               <>

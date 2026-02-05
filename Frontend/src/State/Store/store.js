@@ -8,23 +8,21 @@ import { orderReducer } from "../Customers/Orders/order.reducer";
 import restaurantsOrderReducer from "../Admin/Order/restaurants.order.reducer";
 import superAdminReducer from "../SuperAdmin/superAdmin.reducer";
 import { ingredientReducer } from "../Admin/Ingredients/Reducer";
+import { analyticsReducer } from "../Analytics/analytics.reducer";
 
 
 
-const rootReducer=combineReducers({
+const rootReducer = combineReducers({
 
-    auth:authReducer,
-    restaurant:restaurantReducer,
-    menu:menuItemReducer,
-    cart:cartReducer,
-    order:orderReducer,
-
-    // admin
-    restaurantsOrder:restaurantsOrderReducer,
-    ingredients:ingredientReducer,
-
-    // super admin
-    superAdmin:superAdminReducer
+    auth: authReducer,
+    restaurant: restaurantReducer,
+    menu: menuItemReducer,
+    cart: cartReducer,
+    order: orderReducer,
+    restaurantsOrder: restaurantsOrderReducer,
+    ingredients: ingredientReducer,
+    superAdmin: superAdminReducer,
+    analytics: analyticsReducer
 })
 
-export const store=legacy_createStore(rootReducer,applyMiddleware(thunk))
+export const store = legacy_createStore(rootReducer, applyMiddleware(thunk))

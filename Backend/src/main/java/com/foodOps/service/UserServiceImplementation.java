@@ -82,7 +82,7 @@ public class UserServiceImplementation implements UserService {
 		passwordResetTokenRepository.save(passwordResetToken);
 
 		sendEmail(user.getEmail(), "Password Reset",
-				"Click the following link to reset your password: http://localhost:3000/account/reset-password?token="
+				"Click the following link to reset your password: " + System.getenv("FRONTEND_URL") + "/account/reset-password?token="
 						+ resetToken);
 	}
 

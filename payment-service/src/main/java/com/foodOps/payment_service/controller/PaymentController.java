@@ -37,7 +37,7 @@ public class PaymentController {
             notify.put("email",true);
             paymentLinkRequest.put("notify",notify);
             paymentLinkRequest.put("reminder_enable",true);
-            paymentLinkRequest.put("callback_url","http://localhost:3000/payment/success/"+order
+            paymentLinkRequest.put("callback_url",System.getenv("PAYMENT_CALLBACK_URL")+"/"+order
                     .getId());
             paymentLinkRequest.put("callback_method","get");
 

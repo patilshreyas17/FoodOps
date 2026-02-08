@@ -1,181 +1,109 @@
 # 🍽️ FoodOps
 
-FoodOps is a microservices-based food ordering platform built using **Spring Boot**, **Spring Cloud**, **Docker**, and **MySQL**, with a **React frontend** and an **API Gateway**.
+A modern microservices-based food ordering platform that connects restaurants with customers through seamless online ordering and management capabilities.
 
----
+## 🚀 About FoodOps
 
-##  Tech Stack
+FoodOps is a comprehensive restaurant management and food delivery platform built with cutting-edge technology. It enables restaurant owners to manage their operations efficiently while providing customers with an intuitive ordering experience.
 
-- **Backend:** Spring Boot, Spring Cloud
-- **Gateway:** Spring Cloud Gateway
-- **Service Discovery:** Eureka
-- **Database:** MySQL
-- **Frontend:** React, Vite, Material-UI, Tailwind CSS
-- **Containerization:** Docker & Docker Compose
-- **Authentication:** JWT
-- **Maps Integration:** Google Maps API
-- **Payment:** Razorpay
+## ✨ Key Features
 
----
+### 🏪 For Restaurant Owners
+- **Restaurant Management** - Complete control over restaurant profiles and information
+- **Menu Management** - Dynamic menu creation with categories, pricing, and availability
+- **Order Processing** - Real-time order tracking and management dashboard
+- **Analytics & Insights** - Business intelligence and performance metrics
+- **Payment Integration** - Secure payment processing with multiple options
 
-##  Project Structure
+### 🛍️ For Customers
+- **Restaurant Discovery** - Browse and search restaurants by location and cuisine
+- **Interactive Maps** - Find restaurants with Google Maps integration
+- **Online Ordering** - Seamless ordering experience with real-time updates
+- **Secure Payments** - Multiple payment methods including UPI, cards, and wallets
+- **Order Tracking** - Real-time order status from preparation to delivery
 
-```text
-FoodOps/
-│
-├── Backend/                    # Main Spring Boot application
-├── api-gateway/               # Spring Cloud Gateway
-├── discovery-service/        # Eureka Service Discovery
-├── payment-service/          # Payment microservice
-├── Frontend/                  # React frontend with MapTravel integration
-├── docker-compose.yml         # Docker orchestration
-├── .env.example              # Environment variable template
-├── .env                      # Actual environment values (❌ do NOT commit)
-└── README.md
+## 🏗️ Architecture
+
+FoodOps follows a microservices architecture for scalability and maintainability:
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Frontend      │    │   API Gateway   │    │  Backend Services│
+│   (React)       │◄──►│  (Spring Cloud) │◄──►│  (Spring Boot)   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                                │
+                       ┌─────────────────┐
+                       │ Service Discovery│
+                       │   (Eureka)      │
+                       └─────────────────┘
 ```
 
----
+### Core Services
+- **Frontend** - React.js with modern UI components
+- **API Gateway** - Centralized routing and load balancing
+- **Backend Services** - Business logic and data management
+- **Discovery Service** - Service registration and discovery
+- **Payment Service** - Dedicated payment processing
+- **Database** - MySQL for persistent data storage
 
-##  Environment Configuration
+## 🛠️ Technology Stack
 
-This project uses environment variables for configuration. All environment variables are managed at the root level and injected into containers via Docker Compose.
+### Frontend
+- **React.js** - Modern JavaScript framework
+- **Vite** - Fast build tool and development server
+- **Tailwind CSS** - Utility-first CSS framework
+- **Material-UI** - React component library
+- **React Router** - Client-side routing
+- **Axios** - HTTP client for API calls
 
----
+### Backend
+- **Spring Boot** - Java application framework
+- **Spring Cloud** - Microservices framework
+- **Spring Security** - Authentication and authorization
+- **Spring Data JPA** - Database access layer
+- **Eureka** - Service discovery
+- **JWT** - Token-based authentication
 
-### 📄 Files
+### Infrastructure
+- **Docker** - Containerization
+- **Docker Compose** - Multi-container orchestration
+- **Nginx** - Reverse proxy and load balancing
+- **MySQL** - Relational database
+- **Railway** - Cloud database hosting
 
-- **`.env.example`** → Environment variable template (**committed to Git**)
-- **`.env`** → Actual environment values (**❌ do NOT commit**)
+### Integrations
+- **Google Maps API** - Location services and mapping
+- **Razorpay** - Payment gateway
+- **Travel Advisor API** - Restaurant recommendations
 
----
+## 🌐 Live Application
 
-##  Setup Environment Variables
+**FoodOps is live and running at:** [http://www.foodops.shop](http://www.foodops.shop)
 
-1. Copy the sample file:
+## � Payment Integration
 
-```bash
-cp .env.example .env
-```
+Seamlessly integrated with Razorpay for secure payment processing:
+- Credit/Debit Cards
+- UPI (Unified Payments Interface)
+- Net Banking
+- Digital Wallets
+- Buy Now, Pay Later options
 
-2. Open `.env` and fill in the required values.
+## 🔒 Security Features
 
----
+- **JWT Authentication** - Secure token-based authentication
+- **Password Encryption** - BCrypt encryption for user passwords
+- **CORS Protection** - Cross-origin resource sharing configuration
+- **Input Validation** - Comprehensive input sanitization
+- **Secure APIs** - Protected endpoints with role-based access
 
-##  Environment Variables
 
-```env
-# ==============================
-# FoodOps Environment Variables
-# ==============================
+## 🚀 Deployment
 
-# ---------- Server ----------
-SERVER_PORT=5454
+The application is deployed on a VPS with:
+- **Domain:** www.foodops.shop
+- **Database:** Railway MySQL (managed service)
+- **Container Orchestration:** Docker Compose
+- **Load Balancing:** Nginx reverse proxy
 
-# ---------- MySQL ----------
-MYSQL_ROOT_PASSWORD=root
-MYSQL_DATABASE=foodops
-MYSQL_USER=user
-MYSQL_PASSWORD=password
 
-# ---------- Spring Boot ----------
-SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/foodops?allowPublicKeyRetrieval=true&useSSL=false
-SPRING_DATASOURCE_USERNAME=user
-SPRING_DATASOURCE_PASSWORD=password
-SPRING_JPA_HIBERNATE_DDL_AUTO=update
-SPRING_JPA_SHOW_SQL=true
-
-# ---------- CORS ----------
-CORS_ORIGINS=http://localhost:3000,http://192.168.1.38:3000,http://192.168.1.103:3000
-
-# ---------- Email ----------
-EMAIL=your-email@gmail.com
-EMAIL_APP_PASSWORD=your-app-password
-
-# ---------- Microservices ----------
-DISCOVERY_SERVICE_PORT=8761
-GATEWAY_SERVICE_PORT=9090
-PAYMENT_SERVICE_PORT=9091
-
-# ---------- Payment Gateway ----------
-RAZORPAY_API_KEY=your-razorpay-key
-RAZORPAY_API_SECRET=your-razorpay-secret
-
-# ---------- Frontend Environment Variables ----------
-VITE_API_URL=/proxy
-VITE_GOOGLE_MAPS_API_KEY=your-google-maps-api-key
-VITE_RAPID_API_KEY=your-rapid-api-key
-```
-
----
-
-##  Important Security Notes
-
-- ✅ Commit **`.env.example`**
-- ❌ Never commit **`.env`**
-- ✅ Ensure `.env` is listed in `.gitignore`
-- ✅ All sensitive files are properly ignored
-
----
-
-##  🐳 Running with Docker
-
-From the project root, run:
-
-```bash
-docker compose up --build
-```
-
----
-
-##  🌐 Application URLs
-
-After starting the services:
-
-- **Frontend:** http://localhost:3000
-- **Backend API:** http://localhost:5454
-- **API Gateway:** http://localhost:9090
-- **Discovery Service:** http://localhost:8761
-- **Payment Service:** http://localhost:9091
-
----
-
-##  🗺️ MapTravel Integration
-
-The frontend includes integrated MapTravel functionality with:
-- **Google Maps API** for restaurant locations
-- **Travel Advisor API** for place recommendations
-- **Interactive map** with restaurant markers
-- **Search and filter** capabilities
-
-**Required API Keys:**
-- `VITE_GOOGLE_MAPS_API_KEY`: Get from [Google Cloud Console](https://console.cloud.google.com/)
-- `VITE_RAPID_API_KEY`: Get from [RapidAPI](https://rapidapi.com/)
-
----
-
-##  � Features
-
-- **Restaurant Management:** Add, edit, and manage restaurants
-- **Menu Management:** Dynamic menu items with categories
-- **Order Processing:** Complete order lifecycle
-- **Payment Integration:** Razorpay payment gateway
-- **User Authentication:** JWT-based authentication
-- **Interactive Maps:** Find restaurants with map integration
-- **Admin Dashboard:** Comprehensive admin interface
-- **Customer Interface:** User-friendly ordering experience
-
----
-
-##  🔧 Development
-
-### Frontend Development
-```bash
-cd Frontend
-npm install
-npm run dev
-```
-
-### Backend Development
-```bash
-Open Sts or intellij idea and import all microservices as maven projects/Modules
-```

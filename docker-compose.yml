@@ -104,7 +104,10 @@ services:
         - VITE_RAPID_API_KEY=${VITE_RAPID_API_KEY}
     container_name: foodops-frontend
     ports:
+      - "80:80"
       - "3000:80"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     environment:
       - VITE_API_URL=${VITE_API_URL}
       - VITE_GOOGLE_MAPS_API_KEY=${VITE_GOOGLE_MAPS_API_KEY}

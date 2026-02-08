@@ -32,7 +32,7 @@ const CustomerRoutes = () => {
           <Route path='/search' element={<Search />} />
           <Route path='/map-travel' element={<MapTravel />} />
           <Route path='/admin/add-restaurant' element={<CreateRestaurantForm />} />
-          <Route exact path='/password_change_success' element={<PasswordChangeSuccess />} />
+          <Route exact path='/password-change-success' element={<PasswordChangeSuccess />} />
           <Route exact path='/*' element={<NotFound />} />
         </Routes>
       </main>

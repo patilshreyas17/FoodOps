@@ -1,18 +1,4 @@
 services:
-  mysql:
-    image: mysql:8.1
-    container_name: foodops-mysql
-    env_file: .env
-    volumes:
-      - ./mysql-data:/var/lib/mysql
-    ports:
-      - "3307:3306"
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
   discovery-service:
     build: ./discovery-service
     container_name: discovery-service
@@ -97,8 +83,6 @@ services:
       - EUREKA_CLIENT_EUREKA_SERVER_CONNECT_TIMEOUT_SECONDS=30
       - EUREKA_CLIENT_EUREKA_SERVER_READ_TIMEOUT_SECONDS=30
     depends_on:
-      mysql:
-        condition: service_healthy
       discovery-service:
         condition: service_healthy
     restart: unless-stopped

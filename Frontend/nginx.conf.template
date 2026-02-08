@@ -12,7 +12,7 @@ server {
     location /proxy/ {
         # Remove /proxy prefix and forward to API gateway
         # /proxy/auth/signin -> http://api-gateway:9090/auth/signin
-        proxy_pass http://api-gateway:9090/;
+        proxy_pass http://${API_GATEWAY_URL}:9090/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

@@ -52,11 +52,9 @@ export const addItemToCart = (reqData) => {
           Authorization: `Bearer ${reqData.token}`,
         },
       });
-      console.log("add item to cart ", data)
       dispatch({ type: ADD_ITEM_TO_CART_SUCCESS, payload: data });
 
     } catch (error) {
-      console.log("catch error ", error)
       dispatch({ type: ADD_ITEM_TO_CART_FAILURE, payload: getErrorMessage(error) });
     }
   };
@@ -71,11 +69,9 @@ export const updateCartItem = (reqData) => {
           Authorization: `Bearer ${reqData.jwt}`,
         },
       });
-      console.log("update cartItem ", data)
       dispatch({ type: UPDATE_CARTITEM_SUCCESS, payload: data });
 
     } catch (error) {
-      console.log("catch error ", error)
       dispatch({ type: UPDATE_CARTITEM_FAILURE, payload: getErrorMessage(error) });
     }
   };
@@ -90,11 +86,9 @@ export const removeCartItem = ({ cartItemId, jwt }) => {
           Authorization: `Bearer ${jwt}`,
         },
       });
-      console.log("remove cartItem ", data)
       dispatch({ type: REMOVE_CARTITEM_SUCCESS, payload: cartItemId });
 
     } catch (error) {
-      console.log("catch error ", error)
       dispatch({ type: REMOVE_CARTITEM_FAILURE, payload: getErrorMessage(error) });
     }
   };
@@ -111,9 +105,7 @@ export const clearCartAction = () => {
       });
 
       dispatch({ type: CLEARE_CART_SUCCESS, payload: data });
-      console.log("clear cart ", data)
     } catch (error) {
-      console.log("catch error ", error)
       dispatch({ type: CLEARE_CART_FAILURE, payload: getErrorMessage(error) });
     }
   };

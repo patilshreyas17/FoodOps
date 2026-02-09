@@ -8,6 +8,7 @@ import SuperAdminRestaurant from "./Restaurants/SuperAdminRestaurant";
 import RestaurantRequest from "./RestaurantRequest/RestaurantRequest";
 import SuperAdminDashboard from "./SuperAdminDashboard/SuperAdminDashboard";
 import SuperAdminAnalytics from "./Analytics/SuperAdminAnalytics";
+import SuperAdminNotifications from "./Notifications/SuperAdminNotifications";
 
 const SuperAdmin = () => {
   return (
@@ -22,6 +23,7 @@ const SuperAdmin = () => {
           <Route path="/customers" element={<Customers />}></Route>
           <Route path="/restaurants" element={<SuperAdminRestaurant />}></Route>
           <Route path="/restaurant-request" element={<RestaurantRequest />}></Route>
+          <Route path="/notifications" element={<SuperAdminNotifications />}></Route>
         </Routes>
       </div>
     </div>

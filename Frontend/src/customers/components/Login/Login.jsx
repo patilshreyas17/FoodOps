@@ -30,7 +30,6 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleSubmit = (values) => {
-    console.log("Login form values:", values);
     dispatch(loginUser({ data: values, navigate }));
   };
 

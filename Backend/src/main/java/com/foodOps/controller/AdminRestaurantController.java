@@ -1,8 +1,10 @@
 package com.foodOps.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,15 +24,19 @@ import com.foodOps.request.CreateRestaurantRequest;
 import com.foodOps.response.ApiResponse;
 import com.foodOps.service.RestaurantService;
 import com.foodOps.service.UserService;
+import com.foodOps.service.NotificationService;
 
 @RestController
 @RequestMapping("/api/admin/restaurants")
 public class AdminRestaurantController {
 	@Autowired
 	private RestaurantService restaurantService;
-
+	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private NotificationService notificationService;
 
 	@PostMapping()
 	public ResponseEntity<Restaurant> createRestaurant(
@@ -96,6 +102,27 @@ public class AdminRestaurantController {
 		Restaurant restaurant = restaurantService.getRestaurantsByUserId(user.getId());
 		return ResponseEntity.ok(restaurant);
 
+	}
+	
+	@PostMapping("/notifications/send-promotion")
+	public ResponseEntity<String> sendPromotionToAllCustomers(
+			@RequestBody Map<String, String> request,
+			@RequestHeader("Authorization") String jwt) throws UserException, RestaurantException {
+		
+		User restaurantOwner = userService.findUserProfileByJwt(jwt);
+		Restaurant restaurant = restaurantService.getRestaurantsByUserId(restaurantOwner.getId());
+		
+		String message = request.get("message");
+		if (message == null || message.trim().isEmpty()) {
+			return new ResponseEntity<>("Message cannot be empty", HttpStatus.BAD_REQUEST);
+		}
+		
+		try {
+			notificationService.sendPromotionToAllCustomers(restaurant.getId(), message);
+			return new ResponseEntity<>("Promotional notification sent to all customers successfully", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Failed to send promotional notification: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }

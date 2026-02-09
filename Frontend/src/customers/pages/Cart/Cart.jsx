@@ -47,7 +47,6 @@ const Cart = () => {
   const dispatch = useDispatch();
   const { cart, auth } = useSelector((store) => store);
   const [openAddressModal, setOpenAddressModal] = useState(false);
-  console.log("cart ", cart);
 
   const handleCloseAddressModal = () => {
     setOpenAddressModal(false);
@@ -74,7 +73,6 @@ const Cart = () => {
         },
       },
     };
-    console.log("data",data)
     if (isValid(cart.cartItems)) {
       dispatch(createOrder(data));
     } else setOpenSnakbar(true);

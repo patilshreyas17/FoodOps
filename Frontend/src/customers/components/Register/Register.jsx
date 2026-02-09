@@ -40,7 +40,6 @@ const RegistrationForm = () => {
 
 
 
-    console.log("Form values:", values);
     dispatch(registerUser({ userData: values, navigate }))
   };
 

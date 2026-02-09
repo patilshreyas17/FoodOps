@@ -12,6 +12,8 @@ import Events from "./Events/Events";
 import Category from "./Category/Category";
 import Ingredients from "./Ingredients/Ingredients";
 import RestaurantAnalytics from "./Analytics/RestaurantAnalytics";
+import RestaurantPromotions from "./Promotions/RestaurantPromotions";
+import RestaurantNotifications from "./Notifications/RestaurantNotifications";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import {
   getIngredientCategory,
@@ -155,6 +157,8 @@ const Admin = () => {
                 <Route path="/category" element={<Category />} />
                 <Route path="/details" element={<Details />} />
                 <Route path="/restaurant-details" element={<RestaurantDetailsPage />} />
+                <Route path="/promotions" element={<RestaurantPromotions />} />
+                <Route path="/notifications" element={<RestaurantNotifications />} />
                 <Route path="/analytics" element={
                   <ProtectedAnalyticsRoute>
                     <RestaurantAnalytics />

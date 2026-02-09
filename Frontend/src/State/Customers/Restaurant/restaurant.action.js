@@ -54,7 +54,6 @@ export const getAllRestaurantsAction = (token) => {
         },
       });
       dispatch(getAllRestaurantsSuccess(data));
-      console.log("all restaurant ", data);
     } catch (error) {
       dispatch(getAllRestaurantsFailure(error));
     }
@@ -72,7 +71,6 @@ export const getRestaurantById = (reqData) => {
       });
       dispatch(getRestaurantByIdSuccess(response.data));
     } catch (error) {
-      console.log("error", error)
       dispatch(getRestaurantByIdFailure(error));
     }
   };
@@ -87,10 +85,8 @@ export const getRestaurantByUserId = (jwt) => {
           Authorization: `Bearer ${jwt}`,
         },
       });
-      console.log("get restaurant by user id ", data);
       dispatch({ type: GET_RESTAURANT_BY_USER_ID_SUCCESS, payload: data });
     } catch (error) {
-      console.log("catch error ", error);
       dispatch({
         type: GET_RESTAURANT_BY_USER_ID_FAILURE,
         payload: error.message,
@@ -100,7 +96,6 @@ export const getRestaurantByUserId = (jwt) => {
 };
 
 export const createRestaurant = (reqData) => {
-  console.log("token-----------", reqData.token);
   return async (dispatch) => {
     dispatch(createRestaurantRequest());
     try {
@@ -110,9 +105,7 @@ export const createRestaurant = (reqData) => {
         },
       });
       dispatch(createRestaurantSuccess(data));
-      console.log("created restaurant ", data);
     } catch (error) {
-      console.log("catch error ", error);
       dispatch(createRestaurantFailure(error));
     }
   };
@@ -148,10 +141,8 @@ export const deleteRestaurant = ({ restaurantId, jwt }) => {
           Authorization: `Bearer ${jwt}`,
         },
       });
-      console.log("delete restaurant ", res.data);
       dispatch(deleteRestaurantSuccess(restaurantId));
     } catch (error) {
-      console.log("catch error ", error);
       dispatch(deleteRestaurantFailure(error));
     }
   };
@@ -171,10 +162,8 @@ export const updateRestaurantStatus = ({ restaurantId, jwt }) => {
           },
         }
       );
-      console.log("ressssss ", res.data);
       dispatch({ type: UPDATE_RESTAURANT_STATUS_SUCCESS, payload: res.data });
     } catch (error) {
-      console.log("error ", error)
       dispatch({ type: UPDATE_RESTAURANT_STATUS_FAILURE, payload: error });
     }
   };
@@ -194,10 +183,8 @@ export const createEventAction = ({ data, jwt, restaurantId }) => {
           },
         }
       );
-      console.log("create events ", res.data);
       dispatch({ type: CREATE_EVENTS_SUCCESS, payload: res.data });
     } catch (error) {
-      console.log("catch - ", error);
       dispatch({ type: CREATE_EVENTS_FAILURE, payload: error });
     }
   };
@@ -213,7 +200,6 @@ export const getAllEvents = ({ jwt }) => {
           Authorization: `Bearer ${jwt}`,
         },
       });
-      console.log("get all events ", res.data);
       dispatch({ type: GET_ALL_EVENTS_SUCCESS, payload: res.data });
     } catch (error) {
       dispatch({ type: GET_ALL_EVENTS_FAILURE, payload: error });
@@ -231,10 +217,8 @@ export const deleteEventAction = ({ eventId, jwt }) => {
           Authorization: `Bearer ${jwt}`,
         },
       });
-      console.log("DELETE events ", res.data);
       dispatch({ type: DELETE_EVENTS_SUCCESS, payload: eventId });
     } catch (error) {
-      console.log("catch - ", error);
       dispatch({ type: DELETE_EVENTS_FAILURE, payload: error });
     }
   };
@@ -253,7 +237,6 @@ export const getRestaurnatsEvents = ({ restaurantId, jwt }) => {
           },
         }
       );
-      console.log("get restaurants event ", res.data);
       dispatch({ type: GET_RESTAIRANTS_EVENTS_SUCCESS, payload: res.data });
     } catch (error) {
       dispatch({ type: GET_RESTAIRANTS_EVENTS_FAILURE, payload: error });
@@ -271,10 +254,8 @@ export const createCategoryAction = ({ reqData, jwt }) => {
           Authorization: `Bearer ${jwt}`,
         },
       });
-      console.log("create category ", res.data);
       dispatch({ type: CREATE_CATEGORY_SUCCESS, payload: res.data });
     } catch (error) {
-      console.log("catch - ", error);
       dispatch({ type: CREATE_CATEGORY_FAILURE, payload: error });
     }
   };
@@ -289,7 +270,6 @@ export const getRestaurantsCategory = ({ jwt, restaurantId }) => {
           Authorization: `Bearer ${jwt}`,
         },
       });
-      console.log("get restaurants category ", res.data);
       dispatch({ type: GET_RESTAURANTS_CATEGORY_SUCCESS, payload: res.data });
     } catch (error) {
       dispatch({ type: GET_RESTAURANTS_CATEGORY_FAILURE, payload: error });

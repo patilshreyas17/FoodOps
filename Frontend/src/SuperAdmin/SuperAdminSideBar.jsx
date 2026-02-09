@@ -15,12 +15,14 @@ import { logout } from "../State/Authentication/Action";
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const menu = [
 
   { title: "Dashboard", icon: <Dashboard />, path: "/" },
   { title: "Restaurants", icon: <ShoppingBagIcon />, path: "/restaurants" },
   { title: "Customers", icon: <ShopTwoIcon />, path: "/customers" },
+  { title: "Notifications", icon: <NotificationsIcon />, path: "/notifications" },
   { title: "Restaurant Request", icon: <AddCircleIcon />, path: "/restaurant-request" },
   { title: "Logout", icon: <LogoutIcon />, path: "/" },
 ];

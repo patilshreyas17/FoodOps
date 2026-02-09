@@ -14,5 +14,14 @@ public interface NotificationService {
 	public void sendPromotionalNotification(User user, String message);
 	
 	public List<Notification> findUsersNotification(Long userId);
+	public List<Notification> findRestaurantNotifications(Long restaurantId);
+	
+	// New methods for bulk notifications
+	public void sendNotificationToAllRestaurants(String message);
+	public void sendPromotionToAllCustomers(Long restaurantId, String message);
+	
+	// New methods for notification management
+	public Notification markAsRead(Long notificationId);
+	public void markAllRestaurantNotificationsAsRead(Long restaurantId);
 
 }

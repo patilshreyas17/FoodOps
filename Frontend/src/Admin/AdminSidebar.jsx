@@ -17,6 +17,8 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import CategoryIcon from '@mui/icons-material/Category';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import CampaignIcon from '@mui/icons-material/Campaign';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const menu = [
   { title: "Dashboard", icon: <Dashboard />, path: "", isDashboard: true },
@@ -25,6 +27,8 @@ const menu = [
   { title: "Food Category", icon: <CategoryIcon />, path: "/category" },
   { title: "Ingredients", icon: <FastfoodIcon />, path: "/ingredients" },
   { title: "Events", icon: <EventIcon />, path: "/event" },
+  { title: "Promotions", icon: <CampaignIcon />, path: "/promotions" },
+  { title: "Notifications", icon: <NotificationsIcon />, path: "/notifications" },
   { title: "Analytics", icon: <BarChartIcon />, path: "/analytics", requireApproval: true },
   { title: "Details", icon: <AdminPanelSettingsIcon />, path: "/details" },
   { title: "Logout", icon: <LogoutIcon />, path: "/" },
